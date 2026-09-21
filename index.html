@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>天宇的个人主页 | 车辆工程 · 编程入门中</title>
+<meta name="description" content="天宇，沈阳理工大学车辆工程专业 2026 级大一学生，正在学习 C/C++ 编程基础，对汽车、智能汽车与新能源汽车感兴趣。" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚗</text></svg>" />
+<style>
+  /* ===================== 设计变量 ===================== */
+  :root {
+    --bg: #05070f;
+    --bg-soft: #0a0f1e;
+    --cyan: #22d3ee;
+    --violet: #8b5cf6;
+    --amber: #fbbf24;
+    --text: #e8eefc;
+    --muted: #93a1c0;
+    --line: rgba(140, 170, 230, 0.14);
+    --glass: rgba(13, 19, 35, 0.62);
+    --radius: 18px;
+    --max: 1120px;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    color: var(--text);
+    font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.75;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    /* 插画背景铺满视口并固定在底层；具体缩放/取景由 JS 按视口比例计算（见文件末尾 #11） */
+    background: var(--bg) url("background.jpg") no-repeat fixed center center / cover;
+    transition: background-position 0.6s ease;
+  }
+
+  /* 背景压暗层：中间透一点让插画露出来，四周压暗以保证正文可读 */
+  #bgShade {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      /* 插画居中时，左右边缘与底色自然过渡 */
+      linear-gradient(90deg, rgba(5, 7, 15, 0.94) 0%, rgba(5, 7, 15, 0.35) 22%, rgba(5, 7, 15, 0) 42%,
+                      rgba(5, 7, 15, 0) 58%, rgba(5, 7, 15, 0.35) 78%, rgba(5, 7, 15, 0.94) 100%),
+      radial-gradient(ellipse 70% 55% at 50% 36%, rgba(5, 7, 15, 0.26), rgba(5, 7, 15, 0.58) 62%, rgba(5, 7, 15, 0.72) 100%),
+      linear-gradient(180deg, rgba(5, 7, 15, 0.55) 0%, rgba(5, 7, 15, 0.28) 38%, rgba(5, 7, 15, 0.62) 100%);
+  }
+
+  /* 背景光晕与网格 */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: -20%;
+    z-index: -3;
+    background:
+      radial-gradient(45% 45% at 18% 12%, rgba(34, 211, 238, 0.16), transparent 65%),
+      radial-gradient(45% 45% at 82% 22%, rgba(139, 92, 246, 0.18), transparent 65%),
+      radial-gradient(55% 55% at 50% 105%, rgba(34, 211, 238, 0.10), transparent 70%);
+    animation: drift 22s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background-image:
+      linear-gradient(rgba(140, 170, 230, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(140, 170, 230, 0.055) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 0%, #000 20%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 0%, #000 20%, transparent 80%);
+    pointer-events: none;
+  }
+  @keyframes drift {
+    from { transform: translate3d(-2%, -1%, 0) scale(1); }
+    to   { transform: translate3d(2%, 2%, 0) scale(1.08); }
+  }
+
+  /* 星域画布 */
+  #stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.75;
+    pointer-events: none;
+  }
+
+  /* 鼠标光晕 */
+  #spotlight {
+    position: fixed;
+    width: 520px;
+    height: 520px;
+    margin: -260px 0 0 -260px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(34, 211, 238, 0.10), rgba(139, 92, 246, 0.06) 45%, transparent 70%);
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    will-change: transform;
+  }
+  body.has-pointer #spotlight { opacity: 1; }
+
+  /* 滚动进度条 */
+  #progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    width: 0;
+    z-index: 100;
+    background: linear-gradient(90deg, var(--cyan), var(--violet), var(--amber));
+    box-shadow: 0 0 12px rgba(34, 211, 238, 0.6);
+  }
+
+  /* ===================== 导航 ===================== */
+  header.nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 18px clamp(20px, 5vw, 56px);
+    transition: background 0.35s ease, backdrop-filter 0.35s ease, border-color 0.35s ease, padding 0.35s ease;
+    border-bottom: 1px solid transparent;
+  }
+  header.nav.scrolled {
+    background: rgba(6, 9, 20, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom-color: var(--line);
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 17px;
+  }
+  .brand .mark {
+    width: 30px; height: 30px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.22), rgba(139, 92, 246, 0.28));
+    border: 1px solid var(--line);
+    font-size: 15px;
+  }
+  .brand span.dot { color: var(--cyan); }
+
+  nav.links { display: flex; align-items: center; gap: 4px; }
+  nav.links a {
+    position: relative;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14.5px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    transition: color 0.25s ease, background 0.25s ease;
+  }
+  nav.links a:hover { color: var(--text); background: rgba(140, 170, 230, 0.08); }
+  nav.links a.active { color: var(--cyan); }
+  nav.links a.active::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 2px;
+    transform: translateX(-50%);
+    width: 16px; height: 2px;
+    border-radius: 2px;
+    background: var(--cyan);
+    box-shadow: 0 0 10px var(--cyan);
+  }
+
+  .burger {
+    display: none;
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: rgba(18, 26, 46, 0.6);
+    cursor: pointer;
+    padding: 0;
+    place-items: center;
+  }
+  .burger i {
+    display: block;
+    width: 17px; height: 1.5px;
+    background: var(--text);
+    margin: 3.5px auto;
+    transition: transform 0.3s var(--ease), opacity 0.3s ease;
+  }
+  .burger.open i:nth-child(1) { transform: translateY(5px) rotate(45deg); }
+  .burger.open i:nth-child(2) { opacity: 0; }
+  .burger.open i:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
+
+  /* ===================== 通用区块 ===================== */
+  main, footer { position: relative; z-index: 1; }
+
+  section {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: clamp(72px, 11vh, 132px) clamp(20px, 5vw, 32px);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 12.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin: 0 0 14px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 26px; height: 1px;
+    background: linear-gradient(90deg, var(--cyan), transparent);
+  }
+
+  h2.title {
+    font-size: clamp(26px, 4vw, 38px);
+    line-height: 1.3;
+    margin: 0 0 16px;
+    letter-spacing: -0.01em;
+  }
+  h2.title em {
+    font-style: normal;
+    background: linear-gradient(100deg, var(--cyan), var(--violet));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* 滚动入场 */
+  .reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+  }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* ===================== 首屏 ===================== */
+  #hero {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 120px;
+    position: relative;
+  }
+  .hi {
+    font-size: clamp(14px, 2vw, 16px);
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    margin: 0 0 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .pulse {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.6);
+    animation: pulse 2.2s infinite;
+  }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.55); }
+    70%  { box-shadow: 0 0 0 12px rgba(52, 211, 153, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+  }
+
+  #hero h1 {
+    font-size: clamp(42px, 9vw, 88px);
+    line-height: 1.05;
+    margin: 0 0 8px;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+    /* 渐变文字用不了 text-shadow，改用 drop-shadow 保证背景图上的可读性 */
+    filter: drop-shadow(0 3px 16px rgba(2, 6, 16, 0.92)) drop-shadow(0 1px 3px rgba(2, 6, 16, 0.85));
+  }
+  #hero h1 .glow {
+    background: linear-gradient(100deg, #eaf6ff 10%, var(--cyan) 45%, var(--violet) 85%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .typed-wrap {
+    font-size: clamp(18px, 3.2vw, 27px);
+    font-weight: 600;
+    color: var(--text);
+    min-height: 1.6em;
+    margin: 4px 0 22px;
+  }
+  .typed-wrap .prefix { color: var(--muted); font-weight: 400; }
+  #typed {
+    background: linear-gradient(100deg, var(--cyan), var(--violet));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .caret {
+    display: inline-block;
+    width: 2px; height: 1.05em;
+    background: var(--cyan);
+    vertical-align: -0.16em;
+    margin-left: 3px;
+    animation: blink 1s steps(2, start) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  #hero .lede {
+    max-width: 620px;
+    color: var(--muted);
+    font-size: clamp(15px, 2vw, 16.5px);
+    margin: 0 0 30px;
+  }
+
+  .cta { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 13px 24px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform 0.3s var(--ease), box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+  }
+  .btn.primary {
+    color: #04121a;
+    background: linear-gradient(100deg, var(--cyan), #7dd3fc 55%, var(--violet));
+    box-shadow: 0 10px 34px -12px rgba(34, 211, 238, 0.85);
+  }
+  .btn.primary:hover { transform: translateY(-3px); box-shadow: 0 16px 42px -12px rgba(34, 211, 238, 0.95); }
+  .btn.ghost {
+    color: var(--text);
+    background: rgba(18, 26, 46, 0.5);
+    border-color: var(--line);
+    backdrop-filter: blur(8px);
+  }
+  .btn.ghost:hover { transform: translateY(-3px); border-color: rgba(34, 211, 238, 0.5); color: var(--cyan); }
+
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 52px;
+    padding-top: 26px;
+    border-top: 1px solid var(--line);
+  }
+  .fact b {
+    display: block;
+    font-size: clamp(22px, 3.4vw, 30px);
+    font-weight: 800;
+    background: linear-gradient(120deg, #fff, var(--cyan));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .fact span { font-size: 13px; color: var(--muted); letter-spacing: 0.06em; text-shadow: 0 1px 10px rgba(3, 6, 14, 0.9); }
+
+  /* 背景改为插画后，正文与导航加深投影以避免与画面混在一起 */
+  #hero .lede,
+  .hi,
+  .typed-wrap,
+  .eyebrow,
+  .tl-item p,
+  dl.meta dd,
+  .interest p,
+  .skill p,
+  .about-grid p.body,
+  .note,
+  #contact p.sub,
+  footer { text-shadow: 0 1px 12px rgba(3, 6, 14, 0.9); }
+  nav.links a { text-shadow: 0 1px 10px rgba(3, 6, 14, 0.85); }
+  h2.title, .tl-item h3 { filter: drop-shadow(0 2px 12px rgba(3, 6, 14, 0.9)); }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 28px; left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-size: 11.5px;
+    letter-spacing: 0.24em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .scroll-hint .rail {
+    width: 1px; height: 42px;
+    background: linear-gradient(var(--cyan), transparent);
+    animation: railMove 2s ease-in-out infinite;
+  }
+  @keyframes railMove {
+    0%, 100% { opacity: 0.25; transform: scaleY(0.6); }
+    50% { opacity: 1; transform: scaleY(1); }
+  }
+
+  /* ===================== 关于 ===================== */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 30px;
+    align-items: start;
+  }
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 26px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s var(--ease), border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+  .card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(340px 200px at var(--mx, 50%) var(--my, 0%), rgba(34, 211, 238, 0.10), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+  .card:hover { transform: translateY(-5px); border-color: rgba(34, 211, 238, 0.32); box-shadow: 0 22px 50px -28px rgba(34, 211, 238, 0.55); }
+  .card:hover::after { opacity: 1; }
+
+  .about-grid p.body { color: var(--muted); margin: 0 0 16px; }
+  .about-grid p.body strong { color: var(--text); font-weight: 600; }
+  .about-grid p.body:last-child { margin-bottom: 0; }
+
+  .idcard { display: flex; flex-direction: column; gap: 16px; }
+  .avatar-row { display: flex; align-items: center; gap: 16px; }
+  /* 头像：圆形裁剪容器 + 放大对焦到面部（原图是 408×372 的横幅，直接 cover 会只剩一条） */
+  #avatarBox {
+    width: 68px; height: 68px;
+    flex: none;
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.08), 0 10px 30px -12px rgba(34, 211, 238, 0.7);
+    background: rgba(18, 26, 46, 0.6);
+    transition: box-shadow 0.5s ease;
+  }
+  #avatarBox img {
+    display: block;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    /* 原图 1080×1260，略微放大并对准左侧面部（确保脸完整落在圆内） */
+    transform: scale(1.15) translate3d(-4.4px, -7.8px, 0);
+    transform-origin: center center;
+  }
+  #avatarBox canvas {
+    display: none;
+    width: 100%; height: 100%;
+  }
+  .avatar-row:hover #avatarBox {
+    box-shadow: 0 0 0 5px rgba(139, 92, 246, 0.16), 0 12px 34px -12px rgba(139, 92, 246, 0.8);
+  }
+  .avatar-row .who b { display: block; font-size: 19px; letter-spacing: 0.04em; }
+  .avatar-row .who span { color: var(--muted); font-size: 13.5px; }
+
+  dl.meta { margin: 0; display: grid; gap: 12px; }
+  dl.meta div {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    padding-bottom: 11px;
+    border-bottom: 1px dashed rgba(140, 170, 230, 0.16);
+    font-size: 14px;
+  }
+  dl.meta div:last-child { border-bottom: 0; padding-bottom: 0; }
+  dl.meta dt { color: var(--muted); }
+  dl.meta dd { margin: 0; text-align: right; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+  .chip {
+    font-size: 12.5px;
+    color: var(--cyan);
+    background: rgba(34, 211, 238, 0.08);
+    border: 1px solid rgba(34, 211, 238, 0.22);
+    padding: 5px 12px;
+    border-radius: 999px;
+  }
+
+  /* ===================== 技能 ===================== */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .skill {
+    background: var(--glass);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    backdrop-filter: blur(12px);
+    transition: transform 0.4s var(--ease), border-color 0.4s ease;
+  }
+  .skill:hover { transform: translateY(-4px); border-color: rgba(139, 92, 246, 0.36); }
+  .skill .stage {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed rgba(140, 170, 230, 0.16);
+  }
+  .skill .stage-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    color: var(--cyan);
+    background: rgba(34, 211, 238, 0.09);
+    border: 1px solid rgba(34, 211, 238, 0.25);
+    padding: 5px 11px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .skill .stage-label::before {
+    content: "";
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan);
+  }
+  .skill .dots { display: inline-flex; gap: 6px; }
+  .skill .dots i {
+    display: block;
+    width: 22px; height: 6px;
+    border-radius: 999px;
+    background: rgba(140, 170, 230, 0.16);
+    transition: background 0.7s var(--ease), box-shadow 0.7s ease;
+  }
+  .skill .dots.in i:nth-child(1) { transition-delay: 0.1s; }
+  .skill .dots.in i:nth-child(2) { transition-delay: 0.25s; }
+  .skill .dots.in i:nth-child(3) { transition-delay: 0.4s; }
+  .skill .dots.in i.lv {
+    background: linear-gradient(90deg, var(--cyan), var(--violet));
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+  }
+  .skill h3 { margin: 0; font-size: 16.5px; display: flex; align-items: center; gap: 9px; }
+  .skill h3 i { font-style: normal; font-size: 17px; }
+  .skill p { margin: 12px 0 0; font-size: 13.5px; color: var(--muted); }
+
+  /* ===================== 兴趣 ===================== */
+  .interest-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .interest {
+    padding: 28px 24px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: linear-gradient(170deg, rgba(13, 19, 35, 0.72), rgba(7, 10, 21, 0.58));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.45s var(--ease), border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+  .interest:hover {
+    transform: translateY(-7px);
+    border-color: rgba(34, 211, 238, 0.34);
+    box-shadow: 0 26px 54px -30px rgba(139, 92, 246, 0.8);
+  }
+  .interest .ico {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 23px;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.16), rgba(139, 92, 246, 0.22));
+    border: 1px solid var(--line);
+  }
+  .interest h3 { margin: 0 0 8px; font-size: 17px; }
+  .interest p { margin: 0; font-size: 13.8px; color: var(--muted); }
+
+  /* ===================== 时间线 ===================== */
+  .timeline { position: relative; margin-top: 12px; padding-left: 30px; }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 5px; top: 6px; bottom: 6px;
+    width: 1px;
+    background: linear-gradient(var(--cyan), rgba(139, 92, 246, 0.5), transparent);
+  }
+  .tl-item { position: relative; padding: 0 0 30px; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-item::before {
+    content: "";
+    position: absolute;
+    left: -30px; top: 9px;
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--cyan);
+    box-shadow: 0 0 12px rgba(34, 211, 238, 0.7);
+  }
+  .tl-item .when { font-size: 12.5px; letter-spacing: 0.14em; color: var(--cyan); }
+  .tl-item h3 { margin: 5px 0 6px; font-size: 17.5px; }
+  .tl-item p { margin: 0; color: var(--muted); font-size: 14px; }
+
+  /* ===================== 联系 ===================== */
+  #contact { text-align: center; }
+  #contact .eyebrow { justify-content: center; }
+  #contact .title { margin-bottom: 12px; }
+  #contact p.sub { color: var(--muted); max-width: 560px; margin: 0 auto 34px; }
+
+  .contact-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+  }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 22px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: var(--glass);
+    text-decoration: none;
+    color: var(--text);
+    backdrop-filter: blur(10px);
+    transition: transform 0.35s var(--ease), border-color 0.35s ease, color 0.35s ease;
+  }
+  .contact-item:hover { transform: translateY(-4px); border-color: rgba(34, 211, 238, 0.4); color: var(--cyan); }
+  .contact-item .k { font-size: 12px; color: var(--muted); display: block; text-align: left; }
+  .contact-item .v { font-size: 14.5px; font-weight: 600; }
+  .contact-item .emoji { font-size: 19px; }
+
+  /* 联系方式未公开时的静态卡片：保留卡片质感，但明确“暂不可用” */
+  .contact-static .contact-item {
+    cursor: default;
+    border-style: dashed;
+    border-color: rgba(140, 170, 230, 0.22);
+    background: rgba(14, 20, 36, 0.42);
+  }
+  .contact-static .contact-item:hover { transform: none; border-color: rgba(140, 170, 230, 0.3); color: var(--text); }
+  .contact-static .v { color: var(--muted); font-weight: 500; }
+
+  .note {
+    max-width: 520px;
+    margin: 26px auto 0;
+    font-size: 13.5px;
+    color: var(--muted);
+    opacity: 0.85;
+  }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 30px clamp(20px, 5vw, 32px);
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  footer b { color: var(--text); font-weight: 600; }
+
+  /* ===================== 响应式 ===================== */
+  @media (max-width: 900px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .interest-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 720px) {
+    /* 移动端浏览器对 fixed 背景支持差，改为随页面滚动 */
+    body { background-attachment: scroll; }
+    #stars { opacity: 0.55; }
+    .burger { display: grid; }
+    nav.links {
+      position: fixed;
+      inset: 64px 16px auto 16px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 2px;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(9, 13, 26, 0.94);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 30px 60px -30px #000;
+      opacity: 0;
+      transform: translateY(-12px) scale(0.98);
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s var(--ease);
+    }
+    nav.links.open { opacity: 1; transform: none; pointer-events: auto; }
+    nav.links a { padding: 12px 14px; border-radius: 12px; font-size: 15.5px; }
+    nav.links a.active::after { display: none; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .interest-grid { grid-template-columns: 1fr; }
+    #spotlight { display: none; }
+    .facts { gap: 22px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+<div id="bgShade" aria-hidden="true"></div>
+<div id="progress" aria-hidden="true"></div>
+<canvas id="stars" aria-hidden="true"></canvas>
+<div id="spotlight" aria-hidden="true"></div>
+
+<header class="nav" id="navbar">
+  <a class="brand" href="#hero">
+    <span class="mark">🚗</span>
+    天宇<span class="dot">.</span>
+  </a>
+  <nav class="links" id="navlinks">
+    <a href="#about">关于我</a>
+    <a href="#skills">技能</a>
+    <a href="#interests">兴趣</a>
+    <a href="#journey">经历</a>
+    <a href="#contact">联系</a>
+  </nav>
+  <button class="burger" id="burger" aria-label="打开导航菜单" aria-expanded="false">
+    <i></i><i></i><i></i>
+  </button>
+</header>
+
+<main>
+  <!-- ========== 首屏 ========== -->
+  <section id="hero">
+    <p class="hi"><span class="pulse"></span>沈阳理工大学 · 车辆工程 · 2026 级在读</p>
+    <h1><span class="glow">你好，我是天宇</span></h1>
+    <div class="typed-wrap">
+      <span class="prefix">一个刚起步的&nbsp;</span><span id="typed"></span><span class="caret"></span>
+    </div>
+    <p class="lede">
+      沈阳理工大学车辆工程专业 2026 级新生。现在每天在学的就两件事：编程基础，和车辆工程的专业课。
+      这个页面用来记一下我学到哪儿了、对什么感兴趣，也写给以后的自己看。
+    </p>
+    <div class="cta">
+      <a class="btn primary" href="#about">认识我一下 →</a>
+      <a class="btn ghost" href="#journey">看看我在学什么</a>
+    </div>
+
+    <div class="facts">
+      <div class="fact"><b data-count="1">0</b><span>大学第一年</span></div>
+      <div class="fact"><b data-count="4" data-suffix=" 个">0</b><span>感兴趣的方向</span></div>
+      <div class="fact"><b data-count="1" data-suffix=" 年">0</b><span>编程刚入门</span></div>
+    </div>
+
+    <div class="scroll-hint" aria-hidden="true">
+      <span>Scroll</span>
+      <span class="rail"></span>
+    </div>
+  </section>
+
+  <!-- ========== 关于 ========== -->
+  <section id="about">
+    <p class="eyebrow reveal">About Me</p>
+    <h2 class="title reveal">关于<em>我</em></h2>
+    <div class="about-grid">
+      <div class="card reveal" data-tilt>
+        <p class="body">
+          我叫<strong>天宇</strong>，2026 年入学，现在在<strong>沈阳理工大学</strong>读<strong>车辆工程</strong>，大一。
+          报这个专业的原因挺简单：从小就对车感兴趣，路上见到不认识的车型会忍不住去查一查它是什么车、多少钱、什么动力。
+        </p>
+        <p class="body">
+          上了大学之后，除了专业课，我还想弄明白一件事——<strong>现在的车为什么越来越像一台电脑</strong>。
+          所以这学期我给自己加了一门“课外必修”：学编程。从 <strong>C 语言</strong>开始，现在也刚开始碰一点 C++。
+          目前还处在最基础的阶段，写得出能跑的小程序，但离“会写代码”还差得远，经常被一个报错卡半天。
+        </p>
+        <p class="body">
+          我没打算把话说得太满。接下来的计划很朴素：<strong>把编程基础一点点补上，把专业课认真学好</strong>，
+          有空就多看看智能汽车和新能源汽车方面的东西，等基础够了，再试试把这两个方向凑到一起做点小东西。
+        </p>
+        <div class="chips">
+          <span class="chip"># 车辆工程</span>
+          <span class="chip"># C / C++ 入门中</span>
+          <span class="chip"># 汽车爱好者</span>
+          <span class="chip"># 大一新生</span>
+        </div>
+      </div>
+
+      <div class="card idcard reveal" data-tilt>
+        <div class="avatar-row">
+          <div id="avatarBox">
+            <img id="avatar" src="avatar.jpg" alt="天宇的头像" width="136" height="136" decoding="async" />
+            <canvas id="avatarFallback" width="136" height="136" aria-hidden="true"></canvas>
+          </div>
+          <div class="who">
+            <b>天宇</b>
+            <span>车辆工程 · 2026 级大一</span>
+          </div>
+        </div>
+        <dl class="meta">
+          <div><dt>学校</dt><dd>沈阳理工大学</dd></div>
+          <div><dt>专业</dt><dd>车辆工程</dd></div>
+          <div><dt>年级</dt><dd>2026 级 大一</dd></div>
+          <div><dt>城市</dt><dd>辽宁 · 沈阳</dd></div>
+          <div><dt>正在学</dt><dd>C / C++ 编程基础</dd></div>
+          <div><dt>状态</dt><dd style="color:#34d399">大一在读 · 基础阶段</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 技能 ========== -->
+  <section id="skills">
+    <p class="eyebrow reveal">Skills</p>
+    <h2 class="title reveal">正在学的<em>东西</em></h2>
+    <div class="skills-grid">
+      <div class="skill reveal">
+        <div class="stage">
+          <span class="stage-label">学习中</span>
+          <span class="dots" data-level="2" role="img" aria-label="学习程度：3 级中的第 2 级"><i></i><i></i><i></i></span>
+        </div>
+        <h3><i>💻</i>C 语言</h3>
+        <p>学校课程和自己找的教程同时在跟。变量、循环、函数、数组这些能用了，指针和文件操作还在反复绕，
+          写得出能跑的小程序，但还经常被报错卡住。</p>
+      </div>
+
+      <div class="skill reveal">
+        <div class="stage">
+          <span class="stage-label">刚接触</span>
+          <span class="dots" data-level="1" role="img" aria-label="学习程度：3 级中的第 1 级"><i></i><i></i><i></i></span>
+        </div>
+        <h3><i>➕</i>C++</h3>
+        <p>刚开始看一点，多数时候还在“把 C 的写法套过来”。类和对象这些概念还没真正学明白，
+          目前只是知道大概是什么东西。</p>
+      </div>
+
+      <div class="skill reveal">
+        <div class="stage">
+          <span class="stage-label">入门中</span>
+          <span class="dots" data-level="1" role="img" aria-label="学习程度：3 级中的第 1 级"><i></i><i></i><i></i></span>
+        </div>
+        <h3><i>📐</i>编程基础与算法</h3>
+        <p>知道排序、查找是怎么回事，但还没系统练过。打算先把编程基础写熟一点，再认真补这块，
+          不想在基础不牢的时候硬啃难题。</p>
+      </div>
+
+      <div class="skill reveal">
+        <div class="stage">
+          <span class="stage-label">大一课程</span>
+          <span class="dots" data-level="1" role="img" aria-label="学习程度：3 级中的第 1 级"><i></i><i></i><i></i></span>
+        </div>
+        <h3><i>🔧</i>车辆工程专业课</h3>
+        <p>正在上专业导论、机械制图这类入门课程，课堂上讲的很多东西对我来说都还是新的。
+          课外会自己刷汽车评测和技术解析，看得懂的部分越来越多，但离“懂车”还很远。</p>
+      </div>
+
+      <div class="skill reveal">
+        <div class="stage">
+          <span class="stage-label">初步接触</span>
+          <span class="dots" data-level="1" role="img" aria-label="学习程度：3 级中的第 1 级"><i></i><i></i><i></i></span>
+        </div>
+        <h3><i>🛠️</i>工具与编辑器</h3>
+        <p>会用编辑器写代码、点一下按钮把程序编译运行起来。版本管理、调试工具这些还完全没上道，
+          遇到问题主要还是靠搜索和问人。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 兴趣 ========== -->
+  <section id="interests">
+    <p class="eyebrow reveal">Interests</p>
+    <h2 class="title reveal">我感兴趣的<em>方向</em></h2>
+    <div class="interest-grid">
+      <article class="interest reveal" data-tilt>
+        <div class="ico">🚗</div>
+        <h3>汽车</h3>
+        <p>路上看到不认识的车型会去查，喜欢看评测和车型对比，也爱琢磨这车为什么这么设计、值不值这个价。</p>
+      </article>
+      <article class="interest reveal" data-tilt>
+        <div class="ico">⌨️</div>
+        <h3>编程</h3>
+        <p>刚开始学。最上头的时候是程序第一次按我想的那样跑起来，最崩溃的时候是编译报错看不懂。</p>
+      </article>
+      <article class="interest reveal" data-tilt>
+        <div class="ico">🤖</div>
+        <h3>智能汽车</h3>
+        <p>对辅助驾驶、车机系统、车上那套软件是怎么运行的挺好奇，也是我想学编程的重要原因之一。</p>
+      </article>
+      <article class="interest reveal" data-tilt>
+        <div class="ico">🔋</div>
+        <h3>新能源汽车</h3>
+        <p>电池、电机、电控这些和传统燃油车完全不同的东西，正是我们这届学生要面对的新内容。</p>
+      </article>
+      <article class="interest reveal" data-tilt>
+        <div class="ico">🧩</div>
+        <h3>搞懂原理</h3>
+        <p>比起记住结论，我更想弄明白它是怎么运作的。齿轮怎么传动、悬架为什么这么布置，看懂一次就忘不掉。</p>
+      </article>
+      <article class="interest reveal" data-tilt>
+        <div class="ico">📚</div>
+        <h3>慢慢积累</h3>
+        <p>现在水平一般，但每天都在往前走一点。目标不大：这学期先把编程基础写熟，专业课不挂科。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ========== 经历 ========== -->
+  <section id="journey">
+    <p class="eyebrow reveal">Journey</p>
+    <h2 class="title reveal">我的<em>时间线</em></h2>
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <span class="when">2026 · 秋</span>
+        <h3>入学沈阳理工大学，成为车辆工程专业 2026 级新生</h3>
+        <p>正式开始大学生活。第一次有一整块时间可以系统地学自己感兴趣的东西，也有点紧张——
+          同专业的同学里，比我了解车的人应该不少。</p>
+      </div>
+      <div class="tl-item reveal">
+        <span class="when">2026 · 秋</span>
+        <h3>开始学 C 语言</h3>
+        <p>因为想弄明白车上的软件到底是怎么写的，就从 C 语言开始。第一行 Hello World 折腾了半天，
+          后来又被分号、数组越界和指针轮流教做人。</p>
+      </div>
+      <div class="tl-item reveal">
+        <span class="when">最近</span>
+        <h3>C 语言刚上手，又试着碰了一点 C++</h3>
+        <p>现在的情况是：简单的程序能自己写出来，遇到复杂一点的逻辑还是得慢慢想。
+          C++ 只能算“见过面”，远谈不上会。计划是先别贪多，把 C 的基础写熟。</p>
+      </div>
+      <div class="tl-item reveal">
+        <span class="when">现在</span>
+        <h3>跟着课程走，同时自己补编程</h3>
+        <p>专业课上认真听，课外每天留一点时间写代码。智能汽车、新能源汽车这些方向的东西，
+          目前主要是看和记，等基础好一些再动手试。</p>
+      </div>
+      <div class="tl-item reveal">
+        <span class="when">以后</span>
+        <h3>想试试把车和代码放在一起</h3>
+        <p>还没想好具体做哪个方向，也不着急定。先把编程和车辆工程的专业知识都学扎实，
+          以后再找机会做点和汽车、和代码都相关的东西。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 联系 ========== -->
+  <section id="contact">
+    <p class="eyebrow reveal">Contact</p>
+    <h2 class="title reveal">联系方式<em>还没放上来</em></h2>
+    <p class="sub reveal">
+      这个页面刚开始做，我还没想好把联系方式公开在这里，所以先留空——
+      与其写一个假的邮箱或者电话，不如什么都不写。等以后准备好了再补上。
+    </p>
+    <div class="contact-list contact-static reveal">
+      <div class="contact-item">
+        <span class="emoji">💬</span>
+        <span><span class="k">微信</span><span class="v">暂不公开</span></span>
+      </div>
+      <div class="contact-item">
+        <span class="emoji">📧</span>
+        <span><span class="k">邮箱</span><span class="v">暂不公开</span></span>
+      </div>
+      <div class="contact-item">
+        <span class="emoji">🐙</span>
+        <span><span class="k">GitHub</span><span class="v">还没注册</span></span>
+      </div>
+    </div>
+    <p class="note reveal">如果你是同校或者同专业的同学，直接来找我聊就行，聊车、聊代码都可以。</p>
+  </section>
+</main>
+
+<footer>
+  © <span id="year">2026</span> <b>天宇</b> · 沈阳理工大学 车辆工程 · 一个还在入门的大一学生
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- 1. 星空粒子 ---------- */
+  (function stars() {
+    var cv = document.getElementById("stars");
+    if (!cv || reduce) return;
+    var ctx = cv.getContext("2d");
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = 0, h = 0, pts = [];
+
+    function build() {
+      w = cv.width = Math.floor(window.innerWidth * dpr);
+      h = cv.height = Math.floor(window.innerHeight * dpr);
+      cv.style.width = window.innerWidth + "px";
+      cv.style.height = window.innerHeight + "px";
+      var n = Math.min(130, Math.round((window.innerWidth * window.innerHeight) / 16000));
+      pts = [];
+      for (var i = 0; i < n; i++) {
+        pts.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.22 * dpr,
+          vy: (Math.random() - 0.5) * 0.22 * dpr,
+          r: (Math.random() * 1.4 + 0.5) * dpr,
+          a: Math.random() * 0.5 + 0.2
+        });
+      }
+    }
+
+    var mouse = { x: -9999, y: -9999 };
+    window.addEventListener("mousemove", function (e) {
+      mouse.x = e.clientX * dpr;
+      mouse.y = e.clientY * dpr;
+    }, { passive: true });
+
+    function frame() {
+      ctx.clearRect(0, 0, w, h);
+      var link = 130 * dpr;
+      for (var i = 0; i < pts.length; i++) {
+        var p = pts[i];
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > w) p.vx *= -1;
+        if (p.y < 0 || p.y > h) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(180, 214, 255, " + p.a + ")";
+        ctx.fill();
+
+        for (var j = i + 1; j < pts.length; j++) {
+          var q = pts[j];
+          var dx = p.x - q.x, dy = p.y - q.y;
+          var d = Math.sqrt(dx * dx + dy * dy);
+          if (d < link) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
+            ctx.strokeStyle = "rgba(34, 211, 238, " + (0.16 * (1 - d / link)) + ")";
+            ctx.lineWidth = dpr * 0.6;
+            ctx.stroke();
+          }
+        }
+
+        var mdx = p.x - mouse.x, mdy = p.y - mouse.y;
+        var md = Math.sqrt(mdx * mdx + mdy * mdy);
+        if (md < 150 * dpr) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.strokeStyle = "rgba(139, 92, 246, " + (0.3 * (1 - md / (150 * dpr))) + ")";
+          ctx.lineWidth = dpr * 0.7;
+          ctx.stroke();
+        }
+      }
+      requestAnimationFrame(frame);
+    }
+
+    build();
+    window.addEventListener("resize", build);
+    requestAnimationFrame(frame);
+  })();
+
+  /* ---------- 2. 鼠标光晕 ---------- */
+  (function spotlight() {
+    var el = document.getElementById("spotlight");
+    if (!el || reduce || window.matchMedia("(hover: none)").matches) return;
+    var tx = 0, ty = 0, cx = 0, cy = 0;
+    document.body.classList.add("has-pointer");
+    window.addEventListener("mousemove", function (e) {
+      tx = e.clientX; ty = e.clientY;
+    }, { passive: true });
+    (function loop() {
+      cx += (tx - cx) * 0.12;
+      cy += (ty - cy) * 0.12;
+      el.style.transform = "translate3d(" + cx + "px," + cy + "px,0)";
+      requestAnimationFrame(loop);
+    })();
+  })();
+
+  /* ---------- 3. 打字机 ---------- */
+  (function typing() {
+    var el = document.getElementById("typed");
+    if (!el) return;
+    var list = ["车辆工程大一学生", "正在学 C 语言的编程新手", "喜欢研究车的人", "想把车和代码连起来的人"];
+    if (reduce) { el.textContent = list[0]; return; }
+    var li = 0, ci = 0, del = false;
+    function tick() {
+      var word = list[li];
+      if (!del) {
+        ci++;
+        el.textContent = word.slice(0, ci);
+        if (ci === word.length) { del = true; return setTimeout(tick, 1600); }
+        return setTimeout(tick, 95);
+      }
+      ci--;
+      el.textContent = word.slice(0, ci);
+      if (ci === 0) { del = false; li = (li + 1) % list.length; return setTimeout(tick, 380); }
+      setTimeout(tick, 45);
+    }
+    setTimeout(tick, 500);
+  })();
+
+  /* ---------- 4. 数字滚动 ---------- */
+  (function counters() {
+    var nodes = document.querySelectorAll("[data-count]");
+    if (!nodes.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var el = en.target;
+        io.unobserve(el);
+        var target = parseInt(el.getAttribute("data-count"), 10);
+        var suffix = el.getAttribute("data-suffix") || "";
+        if (reduce) { el.textContent = target + suffix; return; }
+        var start = performance.now(), dur = 1200;
+        (function step(now) {
+          var t = Math.min((now - start) / dur, 1);
+          var eased = 1 - Math.pow(1 - t, 3);
+          el.textContent = Math.round(target * eased) + suffix;
+          if (t < 1) requestAnimationFrame(step);
+        })(start);
+      });
+    }, { threshold: 0.4 });
+    nodes.forEach(function (n) { io.observe(n); });
+  })();
+
+  /* ---------- 5. 滚动入场 + 技能掌握度 ---------- */
+  function paintDots(root) {
+    root.querySelectorAll(".dots").forEach(function (d) {
+      var lv = parseInt(d.getAttribute("data-level"), 10) || 0;
+      Array.prototype.forEach.call(d.children, function (seg, i) {
+        seg.classList.toggle("lv", i < lv);
+      });
+    });
+  }
+
+  (function reveals() {
+    var items = document.querySelectorAll(".reveal");
+    if (!("IntersectionObserver" in window)) {
+      items.forEach(function (el) { el.classList.add("in"); });
+      paintDots(document);
+      document.querySelectorAll(".dots").forEach(function (d) { d.classList.add("in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en, i) {
+        if (!en.isIntersecting) return;
+        var el = en.target;
+        var delay = Math.min(i * 70, 280);
+        setTimeout(function () {
+          el.classList.add("in");
+          paintDots(el);
+          el.querySelectorAll(".dots").forEach(function (d) { d.classList.add("in"); });
+        }, delay);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.16, rootMargin: "0px 0px -8% 0px" });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+
+  /* ---------- 6. 卡片光跟随 + 轻倾斜 ---------- */
+  (function tilt() {
+    if (reduce || window.matchMedia("(hover: none)").matches) return;
+    document.querySelectorAll("[data-tilt]").forEach(function (card) {
+      card.addEventListener("mousemove", function (e) {
+        var r = card.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width;
+        var py = (e.clientY - r.top) / r.height;
+        card.style.setProperty("--mx", (px * 100) + "%");
+        card.style.setProperty("--my", (py * 100) + "%");
+        var rx = (0.5 - py) * 6;
+        var ry = (px - 0.5) * 8;
+        card.style.transform = "perspective(900px) rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg) translateY(-5px)";
+      });
+      card.addEventListener("mouseleave", function () {
+        card.style.transform = "";
+      });
+    });
+  })();
+
+  /* ---------- 7. 导航状态 / 滚动进度 ---------- */
+  (function nav() {
+    var bar = document.getElementById("progress");
+    var header = document.getElementById("navbar");
+    var links = Array.prototype.slice.call(document.querySelectorAll("#navlinks a"));
+    var sections = links.map(function (a) { return document.querySelector(a.getAttribute("href")); });
+
+    function onScroll() {
+      var y = window.scrollY || document.documentElement.scrollTop;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      if (bar) bar.style.width = (max > 0 ? (y / max) * 100 : 0) + "%";
+      if (header) header.classList.toggle("scrolled", y > 24);
+      var idx = -1;
+      for (var i = 0; i < sections.length; i++) {
+        var s = sections[i];
+        if (s && s.getBoundingClientRect().top <= window.innerHeight * 0.36) idx = i;
+      }
+      links.forEach(function (a, i) { a.classList.toggle("active", i === idx); });
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    onScroll();
+  })();
+
+  /* ---------- 8. 移动端菜单 ---------- */
+  (function menu() {
+    var btn = document.getElementById("burger");
+    var nav = document.getElementById("navlinks");
+    if (!btn || !nav) return;
+    btn.addEventListener("click", function () {
+      var open = nav.classList.toggle("open");
+      btn.classList.toggle("open", open);
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    nav.addEventListener("click", function (e) {
+      if (e.target.tagName === "A") {
+        nav.classList.remove("open");
+        btn.classList.remove("open");
+        btn.setAttribute("aria-expanded", "false");
+      }
+    });
+  })();
+
+  /* ---------- 9. 头像：图片加载失败时用字母块兜底 ---------- */
+  (function avatar() {
+    var img = document.getElementById("avatar");
+    var cv = document.getElementById("avatarFallback");
+    if (!img || !cv) return;
+
+    function showFallback() {
+      var ctx = cv.getContext("2d");
+      if (!ctx) return;
+      var size = cv.width;
+      var g = ctx.createLinearGradient(0, 0, size, size);
+      g.addColorStop(0, "#0e7490");
+      g.addColorStop(1, "#6d28d9");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, size, size);
+
+      ctx.globalAlpha = 0.22;
+      for (var i = 0; i < 30; i++) {
+        ctx.beginPath();
+        ctx.arc(Math.random() * size, Math.random() * size, Math.random() * 10 + 2, 0, Math.PI * 2);
+        ctx.fillStyle = "#e0f2fe";
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+
+      ctx.fillStyle = "#f8fbff";
+      ctx.font = "700 " + Math.round(size * 0.42) + "px 'PingFang SC','Microsoft YaHei',sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("天宇", size / 2, size / 2 + size * 0.02);
+
+      img.style.display = "none";
+      cv.style.display = "block";
+    }
+
+    if (img.complete && img.naturalWidth === 0) {
+      showFallback();
+    } else {
+      img.addEventListener("error", showFallback);
+    }
+  })();
+
+  /* ---------- 10. 背景插画取景：保证人物完整可见 ---------- */
+  (function backdrop() {
+    var IMG_W = 1080, IMG_H = 1620;   /* background.jpg 的实际尺寸 */
+    var RATIO = IMG_W / IMG_H;
+    var FIGURE_TOP = 0.10;            /* 原图中人物的纵向范围（比例，实测取材） */
+    var FIGURE_BOTTOM = 0.78;
+
+    function fit() {
+      var vw = window.innerWidth;
+      var vh = window.innerHeight;
+      if (!vw || !vh) return;
+
+      /* cover 所需的缩放：铺满视口 */
+      var sCover = Math.max(vw / IMG_W, vh / IMG_H);
+      /* 让人物完整落在视口内所需的缩放（留出上下少量余量） */
+      var sFigure = (vh * 0.96) / (IMG_H * (FIGURE_BOTTOM - FIGURE_TOP));
+
+      var size, pos;
+      if (sCover <= sFigure) {
+        /* 视口够窄：直接 cover，人物本来就装得下 */
+        size = "cover";
+        pos = "center 22%";
+      } else {
+        /* 视口较宽：把插画缩到人物刚好填满视口高度，水平居中 */
+        size = Math.round(IMG_H * sFigure) + "px auto";
+        pos = "center center";
+      }
+
+      document.body.style.backgroundSize = size;
+      document.body.style.backgroundPosition = pos;
+    }
+
+    /* 手机上竖向空间宝贵，用 cover + 顶部取景更自然 */
+    function apply() {
+      if (window.innerWidth <= 720) {
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundPosition = "center 20%";
+      } else {
+        fit();
+      }
+    }
+
+    var raf = null;
+    window.addEventListener("resize", function () {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(apply);
+    });
+    apply();
+  })();
+
+  /* ---------- 11. 年份 ---------- */
+  var y = document.getElementById("year");
+  if (y) y.textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
