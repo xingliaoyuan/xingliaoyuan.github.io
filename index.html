@@ -927,11 +927,125 @@
   @media (max-height: 540px) and (orientation: landscape) {
     #wallpaper { background-size: contain; background-position: center center; }
   }
+  .next-list { border-top: 1px solid var(--line); }
+  .next-item { display: grid; grid-template-columns: 40px minmax(0,1fr) auto; gap: 20px; align-items: start; padding: 28px 8px; border-bottom: 1px solid var(--line); }
+  .next-index { color: var(--cyan); font: 15px monospace; padding-top: 7px; }
+  .next-item h3 { margin: 0 0 8px; font-size: 19px; }
+  .next-item p { margin: 0; color: var(--muted); font-size: 14px; }
+  @media (max-width: 720px) { .next-item { grid-template-columns: 26px minmax(0,1fr); gap: 12px; } .next-item > .chip { grid-column: 2; justify-self: start; } }
+  .hobbies-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 22px; }
+  .hobby { min-width: 0; }
+  .hobby-label { color: var(--cyan); font-size: 12px; letter-spacing: .1em; }
+  .hobby h3 { font-size: 22px; margin: 22px 0 14px; line-height: 1.5; }
+  .hobby p { font-size: 14px; color: var(--muted); line-height: 1.95; margin: 0; }
+  .hobby-games { list-style: none; padding: 0; margin: 24px 0 0; }
+  .hobby-games li { padding: 9px 0; border-top: 1px solid var(--line); font-size: 14px; }
+  .hobby-note { color: var(--muted); font-size: 14px; margin: 24px 0 0; }
+  @media (min-width: 721px) and (max-width: 1000px) {
+    header.nav { gap: 10px; }
+    nav.links { gap: 0; }
+    nav.links a { padding-inline: 7px; font-size: 12px; }
+    nav.links a:last-child { padding-inline: 10px; }
+  }
+  @media (max-width: 900px) { .hobbies-grid { grid-template-columns: 1fr; } }
+  /* 整幅浅色板块与错位标题：正文保持原来的阅读顺序。 */
+  section.color-section {
+    max-width: none; padding: 100px 0; margin: 0;
+    background: var(--section-bg); border-top: 1px solid rgba(89,68,46,.08);
+  }
+  #about { --section-bg: rgba(255,246,231,.48); }
+  #skills { --section-bg: rgba(250,239,210,.48); }
+  #campus { --section-bg: rgba(251,233,220,.48); }
+  #interests { --section-bg: rgba(249,240,220,.48); }
+  #journey { --section-bg: rgba(247,229,210,.48); }
+  #hobbies { --section-bg: rgba(251,228,216,.48); }
+  #next { --section-bg: rgba(246,239,213,.48); }
+  #contact { --section-bg: rgba(252,242,226,.48); }
+  .section-inner { max-width: var(--max); margin: 0 auto; padding: 0 32px; }
+  .section-heading { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(0,.7fr); align-items: end; gap: 40px; margin-bottom: 48px; text-align: left; }
+  .heading-main { position: relative; padding-left: 64px; }
+  .section-index { position: absolute; left: 0; top: 0; font-size: 14px; letter-spacing: .08em; color: var(--cyan); font-family: Georgia,serif; border-top: 1px solid currentColor; padding-top: 9px; width: 34px; }
+  .section-heading .eyebrow { font-size: 10px; margin-bottom: 18px; }
+  .section-heading .eyebrow::before { display: none; }
+  .section-heading h2.title { font-size: clamp(36px,5.3vw,64px); line-height: 1.18; margin: 0; font-weight: 800; letter-spacing: -.045em; }
+  .section-heading h2.title em { display: block; padding-left: .7em; margin-top: 8px; font-weight: 500; }
+  .heading-aside { max-width: 340px; padding: 0 0 5px 20px; border-left: 2px solid rgba(168,94,46,.27); }
+  .aside-label { font-size: 12px; color: var(--cyan); letter-spacing: .12em; }
+  .heading-aside p { font-size: 15px; line-height: 1.9; color: var(--muted); margin: 10px 0 0; }
+  #campus .heading-main, #hobbies .heading-main { padding-top: 20px; }
+  #campus .heading-aside, #hobbies .heading-aside { align-self: center; }
+  .color-section .card, .color-section .skill, .color-section .interest { background: rgba(255,253,249,.7); }
+  .color-section .project:nth-child(n) { background: rgba(255,253,249,.7); }
+  #contact .section-heading { text-align: left; }
+  #contact .sub { margin-left: auto; margin-right: auto; }
+  @media (max-width: 720px) {
+    section.color-section { padding: 64px 0; }
+    .section-inner { padding: 0 20px; }
+    .section-heading { grid-template-columns: 1fr; gap: 24px; margin-bottom: 30px; }
+    .heading-main { padding-left: 42px; }
+    .section-index { width: 26px; font-size: 12px; }
+    .section-heading h2.title { font-size: clamp(32px,9vw,46px); }
+    .heading-aside { margin-left: 42px; padding-left: 14px; max-width: none; }
+    .heading-aside p { font-size: 14px; }
+    #campus .heading-main, #hobbies .heading-main { padding-top: 0; }
+  }
+  /* 壁纸贯穿各栏：薄暖色叠层保留分区，正文卡片单独保证可读性。 */
+  #wallpaper { opacity: .66; }
+  #bgShade {
+    background: linear-gradient(90deg,rgba(255,250,243,.30),rgba(255,250,243,.12) 30%,rgba(255,250,243,.12) 70%,rgba(255,250,243,.30));
+  }
+  .color-section .card, .color-section .skill, .color-section .interest,
+  .color-section .project:nth-child(n) { background: rgba(255,253,249,.86); }
+  .heading-aside, .tl-item, .next-item { text-shadow: 0 1px 6px rgba(255,250,243,.85); }
+  @media (max-width: 720px) and (orientation: portrait) {
+    #wallpaper { opacity: .58; }
+    #bgShade { background: rgba(255,250,243,.22); }
+  }
+  /* 宽屏两侧的日光、枝叶与细线；手机不显示装饰。 */
+  #sideScenery { display: none; pointer-events: none; }
+  @media (min-width: 1100px) {
+    #sideScenery { display: block; position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+    .scenery-side { position: absolute; top: 0; bottom: 0; width: clamp(120px,18vw,320px); overflow: hidden; }
+    .scenery-left { left: 0; background: radial-gradient(ellipse at 0 25%,rgba(234,182,88,.22),transparent 65%); }
+    .scenery-right { right: 0; transform: scaleX(-1); background: radial-gradient(ellipse at 0 70%,rgba(222,157,67,.18),transparent 65%); }
+    .sun-ring { position: absolute; width: 340px; height: 340px; border: 1px solid rgba(168,120,50,.18); border-radius: 50%; left: -220px; top: 14%; box-shadow: 0 0 0 18px rgba(220,171,91,.035),0 0 0 58px rgba(220,171,91,.025); }
+    .ring-small { width: 230px; height: 230px; left: -140px; top: 68%; }
+    .scenery-right .sun-ring { top: 48%; }
+    .scenery-right .ring-small { top: 8%; }
+    .stem { position: absolute; top: 35%; left: 32px; width: 70px; height: 46%; border-right: 1px solid rgba(163,118,55,.19); border-radius: 50%; transform: rotate(22deg); }
+    .leaf { position: absolute; width: 20px; height: 42px; border-radius: 95% 0 95% 0; background: linear-gradient(135deg,rgba(229,179,80,.42),rgba(166,111,38,.10)); border: 1px solid rgba(189,138,55,.13); animation: leafSway 12s ease-in-out infinite alternate; }
+    .leaf::after { content: ''; position: absolute; width: 1px; height: 80%; left: 48%; top: 10%; background: rgba(157,104,31,.16); transform: rotate(22deg); }
+    .leaf-one { top: 20%; left: 48%; --leaf-turn: -32deg; }
+    .leaf-two { top: 43%; left: 22%; --leaf-turn: 45deg; animation-delay: -4s; width: 15px; height: 30px; }
+    .leaf-three { top: 69%; left: 56%; --leaf-turn: 18deg; animation-delay: -8s; }
+    .leaf-four { top: 86%; left: 18%; --leaf-turn: 68deg; animation-delay: -2s; width: 13px; height: 26px; }
+    .scenery-right .leaf { animation-delay: -6s; }
+    @keyframes leafSway { from { transform: translateY(-7px) rotate(var(--leaf-turn)); } to { transform: translate(8px,9px) rotate(calc(var(--leaf-turn) + 16deg)); } }
+  }
+  @media (prefers-reduced-motion: reduce) { #sideScenery .leaf { animation: none; transform: rotate(var(--leaf-turn)); } }
+.contact-item .v { overflow-wrap: anywhere; } .contact-item > span:last-child { min-width: 0; }
+  .favorites { margin-top: 44px; padding-top: 30px; border-top: 1px solid var(--line); }
+  .favorites-heading h3 { font-size: 28px; margin: 8px 0; }
+  .favorites-heading p { margin: 0; color: var(--muted); font-size: 14px; }
+  .favorites-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; margin-top: 24px; }
+  .favorite-group { background: rgba(255,253,249,.86); border: 1px solid var(--line); border-radius: 22px; padding: 24px; }
+  .favorite-group h4 { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 17px; margin: 0 0 14px; }
+  .favorite-group h4 span { color: var(--cyan); font-size: 10px; letter-spacing: .12em; font-weight: 500; }
+  .favorite-group ul { list-style: none; margin: 0; padding: 0; }
+  .favorite-group li { display: flex; gap: 16px; align-items: center; padding: 18px 0; border-top: 1px solid var(--line); min-height: 84px; }
+  .favorite-order { color: var(--cyan); font: 12px Georgia,serif; }
+  .favorite-name { font-size: 17px; overflow-wrap: anywhere; }
+  .favorite-artist { display: block; color: var(--muted); font-size: 12px; margin-top: 3px; }
+  @media (max-width: 720px) { .favorites-grid { grid-template-columns: 1fr; gap: 16px; } .favorite-group { padding: 20px; } }
 </style>
 </head>
 <body>
 <div id="wallpaper" aria-hidden="true"></div>
 <div id="bgShade" aria-hidden="true"></div>
+<div id="sideScenery" aria-hidden="true">
+  <div class="scenery-side scenery-left"><span class="sun-ring"></span><span class="sun-ring ring-small"></span><span class="stem"></span><i class="leaf leaf-one"></i><i class="leaf leaf-two"></i><i class="leaf leaf-three"></i><i class="leaf leaf-four"></i></div>
+  <div class="scenery-side scenery-right"><span class="sun-ring"></span><span class="sun-ring ring-small"></span><span class="stem"></span><i class="leaf leaf-one"></i><i class="leaf leaf-two"></i><i class="leaf leaf-three"></i><i class="leaf leaf-four"></i></div>
+</div>
 <div id="progress" aria-hidden="true"></div>
 <canvas id="stars" aria-hidden="true"></canvas>
 <div id="spotlight" aria-hidden="true"></div>
@@ -946,6 +1060,7 @@
     <a href="#skills">技能</a>
     <a href="#campus">日常</a>
     <a href="#interests">方向</a>
+    <a href="#hobbies">爱好</a>
     <a href="#journey">经历</a>
     <a href="#contact">联系</a>
   </nav>
@@ -985,9 +1100,10 @@
   </section>
 
   <!-- ========== 关于 ========== -->
-  <section id="about">
-    <p class="eyebrow reveal">About Me</p>
-    <h2 class="title reveal">关于<em>我</em></h2>
+  <section id="about" class="color-section">
+<div class="section-inner"><div class="section-heading"><div class="heading-main"><span class="section-index reveal" aria-hidden="true">01</span><p class="eyebrow reveal">About Me</p><h2 class="title reveal">关于<em>我</em></h2></div><div class="heading-aside reveal"><span class="aside-label">认识一下</span><p>从车辆工程开始，慢慢找到自己想做的事。</p></div></div>
+    
+    
     <div class="about-grid">
       <div class="card reveal" data-tilt>
         <p class="body">我叫<strong>李天宇 / TYUN</strong>，是<strong>沈阳理工大学车辆工程专业的 2026 级本科生</strong>。选这个专业，是想弄明白车为什么能跑、各个部分是怎么配合的。以后也想做一些和汽车开发有关的工作。</p>
@@ -1021,13 +1137,15 @@
         </dl>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- ========== 技能 ========== -->
-  <section id="skills">
-    <p class="eyebrow reveal">Skills &amp; Learning</p>
-    <h2 class="title reveal">最近在<em>学什么</em></h2>
-    <p class="section-intro reveal">先把 C 语言和 Python 的基础写熟，再开始接触 STM32。</p>
+  <section id="skills" class="color-section">
+<div class="section-inner"><div class="section-heading"><div class="heading-main"><span class="section-index reveal" aria-hidden="true">02</span><p class="eyebrow reveal">Skills &amp; Learning</p><h2 class="title reveal">最近在<em>学什么</em></h2></div><div class="heading-aside reveal"><span class="aside-label">一点点学会</span><p>不急着列一长串技能，先把眼前的基础弄懂。</p></div></div>
+    
+    
+    
     <div class="skills-grid">
       <div class="skill reveal">
         <div class="stage"><span class="stage-label">系统学习中</span><span class="dots" data-level="1" aria-hidden="true"><i></i><i></i><i></i></span></div>
@@ -1046,13 +1164,15 @@
         <h3><i>🚗</i>智能汽车</h3><p>未来希望探索的方向。先积累车辆工程、编程与嵌入式基础，再尝试把感知、控制与车辆系统联系起来。</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- ========== 大学日常 ========== -->
-  <section id="campus">
-    <p class="eyebrow reveal">Campus Life</p>
-    <h2 class="title reveal">我的<em>大学日常</em></h2>
-    <p class="section-intro reveal">上课、学点编程，也给社团和校园生活留一点位置。</p>
+  <section id="campus" class="color-section">
+<div class="section-inner"><div class="section-heading"><div class="heading-main"><span class="section-index reveal" aria-hidden="true">03</span><p class="eyebrow reveal">Campus Life</p><h2 class="title reveal">我的<em>大学日常</em></h2></div><div class="heading-aside reveal"><span class="aside-label">在沈理的日子</span><p>课堂之外，还有社团和没来得及记下的日常。</p></div></div>
+    
+    
+    
     <div class="projects-grid">
       <article class="card project reveal" data-tilt>
         <div class="project-top"><span class="project-number">01 /</span><span class="chip">课堂与课外</span></div>
@@ -1070,12 +1190,14 @@
         <div class="chips"><span class="chip">沈阳理工大学</span><span class="chip">2026 级</span><span class="chip">日常随记</span></div>
       </article>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- ========== 兴趣 ========== -->
-  <section id="interests">
-    <p class="eyebrow reveal">Interests</p>
-    <h2 class="title reveal">我感兴趣的<em>方向</em></h2>
+  <section id="interests" class="color-section">
+<div class="section-inner"><div class="section-heading"><div class="heading-main"><span class="section-index reveal" aria-hidden="true">04</span><p class="eyebrow reveal">Interests</p><h2 class="title reveal">我感兴趣的<em>方向</em></h2></div><div class="heading-aside reveal"><span class="aside-label">好奇心往哪走</span><p>关于车，也关于它背后的原理。</p></div></div>
+    
+    
     <div class="interest-grid">
       <article class="interest reveal" data-tilt>
         <div class="ico">🚗</div>
@@ -1108,40 +1230,97 @@
         <p>把每一次练习、报错和解决问题的过程记下来。先写熟基础程序，再把小项目一点点推进，让成长有迹可循。</p>
       </article>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- ========== 经历 ========== -->
-  <section id="journey">
-    <p class="eyebrow reveal">Journey</p><h2 class="title reveal">大学里的<em>几个节点</em></h2>
+  <section id="journey" class="color-section">
+<div class="section-inner"><div class="section-heading"><div class="heading-main"><span class="section-index reveal" aria-hidden="true">05</span><p class="eyebrow reveal">Journey</p><h2 class="title reveal">大学里的<em>几个节点</em></h2></div><div class="heading-aside reveal"><span class="aside-label">走到这里</span><p>把大学里的几个节点，按顺序留在这里。</p></div></div>
+    
     <div class="timeline"><div class="tl-item reveal"><span class="when">2026</span><h3>进入沈阳理工大学车辆工程专业</h3><p>成为 2026 级本科生，从专业知识出发，开始理解车辆结构、动力与控制之间的联系。</p></div>
       <div class="tl-item reveal"><span class="when">2026</span><h3>开始学习 C 语言、Python</h3><p>用 C 语言建立编程基础，用 Python 完成猜数字小游戏，开始把想法写成能运行的程序。</p></div>
       <div class="tl-item reveal"><span class="when">2026</span><h3>加入计算机协会和智能车社团</h3><p>和有共同兴趣的同学一起学习，寻找从编程练习走向硬件实践与智能车项目的机会。</p></div>
       <div class="tl-item reveal"><span class="when">未来</span><h3>向新能源汽车 / 嵌入式方向发展</h3><p>下一站是 STM32、传感器与电机控制。希望在扎实的车辆工程基础上，用代码参与未来汽车的开发。</p></div></div>
-  </section>
+  </div>
+</section>
+
+  <!-- ========== 课余爱好 ========== -->
+  <section id="hobbies" class="color-section">
+<div class="section-inner"><div class="section-heading"><div class="heading-main"><span class="section-index reveal" aria-hidden="true">06</span><p class="eyebrow reveal">Off Campus</p><h2 class="title reveal">课余的<em>一些爱好</em></h2></div><div class="heading-aside reveal"><span class="aside-label">切换到课余</span><p>游戏、音乐和故事，也是生活的一部分。</p></div></div>
+    
+    
+    
+    <div class="hobbies-grid">
+      <article class="card hobby reveal" data-tilt>
+        <span class="hobby-label">01 / 游戏</span>
+        <h3>平时玩的几款</h3>
+        <p>明日方舟、以撒的结合，还有 BLACKSOULS。碰到也玩这些的同学，就又多了个可以聊的话题。</p>
+        <ul class="hobby-games"><li>明日方舟</li><li>以撒的结合</li><li>BLACKSOULS</li></ul>
+      </article>
+      <article class="card hobby reveal" data-tilt>
+        <span class="hobby-label">02 / 音乐</span>
+        <h3>歌单里常有的</h3>
+        <p>会听一些术力口，也听游戏配乐。这里先记下偏好，以后再慢慢补上想分享的曲子。</p>
+        <div class="chips"><span class="chip">术力口 / VOCALOID</span><span class="chip">游戏配乐 / OST</span></div>
+      </article>
+      <article class="card hobby reveal" data-tilt>
+        <span class="hobby-label">03 / 故事</span>
+        <h3>动画、小说和漫画</h3>
+        <p>课余也会看一些动画、小说和漫画。具体作品先不列长单，之后有想聊的，再在这里写几句。</p>
+        <div class="chips"><span class="chip">动画</span><span class="chip">小说</span><span class="chip">漫画</span></div>
+      </article>
+    </div>
+    <div class="favorites" aria-labelledby="favorites-title">
+      <div class="favorites-heading reveal"><span class="aside-label">FAVORITES</span><h3 id="favorites-title">我的收藏</h3><p>喜欢的作品和歌，放在这里。</p></div>
+      <div class="favorites-grid">
+        <div class="favorite-group reveal"><h4>动漫 <span>ANIME / 02</span></h4>
+          <ul><li><span class="favorite-order" aria-hidden="true">01</span><span class="favorite-name">《记忆管理局》</span></li><li><span class="favorite-order" aria-hidden="true">02</span><span class="favorite-name">《金牌得主》</span></li></ul>
+        </div>
+        <div class="favorite-group reveal"><h4>音乐 <span>MUSIC / 02</span></h4>
+          <ul><li><span class="favorite-order" aria-hidden="true">01</span><div><span class="favorite-name">2240</span><span class="favorite-artist">二宫爱</span></div></li><li><span class="favorite-order" aria-hidden="true">02</span><div><span class="favorite-name">Without You</span><span class="favorite-artist">Appleby</span></div></li></ul>
+        </div>
+      </div>
+    </div>
+    <p class="hobby-note reveal">如果你也有相似的爱好，除了聊车和代码，我们还能聊聊这些。</p>
+  </div>
+</section>
+
+  <!-- ========== 下一步 ========== -->
+  <section id="next" class="color-section">
+<div class="section-inner"><div class="section-heading"><div class="heading-main"><span class="section-index reveal" aria-hidden="true">07</span><p class="eyebrow reveal">Next Up</p><h2 class="title reveal">接下来<em>想做的事</em></h2></div><div class="heading-aside reveal"><span class="aside-label">下一页，待续</span><p>不用一次做完，先从其中一件开始。</p></div></div>
+    
+    
+    
+    <div class="next-list">
+      <article class="next-item reveal"><span class="next-index">01</span><div><h3>把 C 语言基础练熟</h3><p>继续练习输入输出和条件判断，试着独立写出更多小程序。</p></div><span class="chip">正在进行</span></article>
+      <article class="next-item reveal"><span class="next-index">02</span><div><h3>开始学习 STM32</h3><p>从单片机基础开始，再慢慢接触传感器和电机控制。</p></div><span class="chip">下一步</span></article>
+      <article class="next-item reveal"><span class="next-index">03</span><div><h3>试一次智能车实践</h3><p>等基础准备好了，和社团同学一起把想法放到实物上试试。</p></div><span class="chip">以后尝试</span></article>
+    </div>
+  </div>
+</section>
 
   <!-- ========== 联系 ========== -->
-  <section id="contact">
-    <p class="eyebrow reveal">Contact</p>
-    <h2 class="title reveal">可以在这里<em>找到我</em></h2>
+  <section id="contact" class="color-section">
+<div class="section-inner"><div class="section-heading"><div class="heading-main"><span class="section-index reveal" aria-hidden="true">08</span><p class="eyebrow reveal">Contact</p><h2 class="title reveal">可以在这里<em>找到我</em></h2></div><div class="heading-aside reveal"><span class="aside-label">有空聊聊</span><p>从同一门课，到同一款游戏，都可以是话题。</p></div></div>
+    
+    
     <p class="sub reveal">
       我的 GitHub 放在下面。如果你也在学编程，或者是同校同学，欢迎来交流。
     </p>
     <div class="contact-list reveal">
       <div class="contact-item">
         <span class="emoji">💬</span>
-        <span><span class="k">微信</span><span class="v">暂不公开</span></span>
+        <span><span class="k">微信</span><span class="v">L15940475106</span></span>
       </div>
-      <div class="contact-item">
-        <span class="emoji">📧</span>
-        <span><span class="k">邮箱</span><span class="v">暂不公开</span></span>
-      </div>
+      <a class="contact-item" href="mailto:l15940475106@163.com"><span class="emoji">📧</span><span><span class="k">邮箱</span><span class="v">l15940475106@163.com</span></span></a>
       <a class="contact-item" href="https://github.com/xingliaoyuan" target="_blank" rel="noopener noreferrer" aria-label="访问李天宇的 GitHub 主页（新窗口）">
         <span class="emoji">🐙</span>
         <span><span class="k">GitHub 主页 ↗</span><span class="v">@xingliaoyuan</span></span>
       </a>
     </div>
-    <p class="note reveal">如果你是同校或者同专业的同学，直接来找我聊就行，聊车、聊代码都可以。</p>
-  </section>
+    <p class="note reveal">同校同学，或者刚好有共同爱好的朋友，都欢迎来聊聊。</p>
+  </div>
+</section>
 </main>
 
 <footer>
