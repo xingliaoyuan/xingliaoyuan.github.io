@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>天宇 TYUN | 车辆工程 · 智能汽车 · 成长记录</title>
-<meta name="description" content="天宇 TYUN，沈阳理工大学车辆工程专业 2026 级本科生。记录 C 语言、Python 与 STM32 学习路线，探索智能汽车、新能源汽车和嵌入式开发。" />
+<title>李天宇的主页 | 学车，也学写代码</title>
+<meta name="description" content="李天宇 TYUN，沈阳理工大学车辆工程专业 2026 级本科生。记录 C 语言、Python 与 STM32 学习路线，探索智能汽车、新能源汽车和嵌入式开发。" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚗</text></svg>" />
 <style>
   /* ===================== 设计变量 ===================== */
@@ -35,7 +35,7 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     /* 插画背景铺满视口并固定在底层；具体缩放/取景由 JS 按视口比例计算（见文件末尾 #11） */
-    background: var(--bg) url("background.jpg") no-repeat fixed center center / cover;
+    background: var(--bg);
     transition: background-position 0.6s ease;
   }
 
@@ -743,9 +743,194 @@
     html { scroll-behavior: auto; }
     .reveal { opacity: 1; transform: none; }
   }
+  /* 新壁纸：固定在视口，不会随长页面被拉伸；保留原图比例。 */
+  #wallpaper {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: url("background.jpg?v=20261013-2011");
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    background-position: 85% center;
+  }
+  #bgShade {
+    z-index: 0;
+    background:
+      linear-gradient(90deg, rgba(5,7,15,.94) 0%, rgba(5,7,15,.75) 34%, rgba(5,7,15,.32) 65%, rgba(5,7,15,.50) 100%),
+      linear-gradient(180deg, rgba(5,7,15,.25), rgba(5,7,15,.12) 40%, rgba(5,7,15,.60));
+  }
+  @media (max-width: 720px) and (orientation: portrait) {
+    #wallpaper {
+      height: 100vh;
+      height: 100lvh;
+      bottom: auto;
+      background-size: cover;
+      background-position: 50% 35%;
+    }
+    #bgShade {
+      background: linear-gradient(180deg, rgba(5,7,15,.57), rgba(5,7,15,.50) 35%, rgba(5,7,15,.73)),
+        linear-gradient(90deg, rgba(5,7,15,.16), transparent 70%);
+    }
+  }
+  @media (max-height: 540px) and (orientation: landscape) {
+    #wallpaper { background-size: auto 100%; background-position: 88% center; }
+  }
+  /* 暖色阅读主题：保留布局与动画，用浅底与低饱和颜色呈现。 */
+  :root {
+    --bg: #f7f0e5; --bg-soft: #efe4d5;
+    --cyan: #96603b; --violet: #b77b62; --amber: #c89542;
+    --text: #3f332b; --muted: #746457;
+    --line: rgba(116,83,55,.19); --glass: rgba(255,250,242,.88);
+  }
+  body { background: var(--bg); }
+  #wallpaper { opacity: .22; }
+  #bgShade { background: linear-gradient(90deg,rgba(247,240,229,.96),rgba(247,240,229,.65) 55%,rgba(247,240,229,.30)),linear-gradient(180deg,rgba(253,245,231,.22),rgba(247,240,229,.62)); }
+  body::before { background: radial-gradient(ellipse at 15% 15%,rgba(233,184,120,.24),transparent 65%),radial-gradient(ellipse at 80% 80%,rgba(224,159,134,.16),transparent 65%); }
+  body::after { opacity: .35; }
+  #stars { opacity: .28; }
+  #spotlight { background: radial-gradient(circle,rgba(211,151,81,.10),transparent 70%); }
+  header.nav.scrolled { background: rgba(250,244,234,.93); }
+  .brand .mark, .interest .ico { background: #efe0cd; }
+  #hero h1, h2.title, .tl-item h3 { filter: none; }
+  #hero h1 .glow { background: none; color: var(--text); }
+  #typed, h2.title em { background: none; color: var(--cyan); }
+  #hero .lede, .hi, .typed-wrap, .eyebrow, .tl-item p, dl.meta dd,
+  .interest p, .skill p, .about-grid p.body, .note, #contact p.sub,
+  footer, nav.links a, .fact span { text-shadow: none; }
+  #hero h1 { font-size: clamp(40px,7.5vw,72px); }
+  #hero .lede { line-height: 2; }
+  .eyebrow { letter-spacing: .12em; }
+  .btn.primary { background: #98613f; color: #fffaf3; box-shadow: 0 5px 16px rgba(112,75,47,.12); }
+  .btn.primary:hover { box-shadow: 0 8px 24px rgba(112,75,47,.20); }
+  .btn.ghost, .burger { background: rgba(255,250,242,.88); }
+  .fact b { background: none; color: var(--cyan); }
+  .card, .skill, .interest { box-shadow: 0 5px 20px rgba(91,61,32,.035); }
+  .interest { background: var(--glass); }
+  .card::after { background: radial-gradient(340px 200px at var(--mx,50%) var(--my,0%),rgba(214,171,111,.12),transparent 70%); }
+  .card:hover, .skill:hover, .interest:hover { border-color: rgba(151,97,57,.38); box-shadow: 0 12px 28px rgba(91,61,32,.09); }
+  .chip, .skill .stage-label { background: #f3e7d7; border-color: #e0cbb5; color: #865531; }
+  .skill .dots.in i.lv { box-shadow: none; }
+  .contact-item { background: rgba(255,250,242,.9); }
+  .contact-item:hover { background: #f3e7d7; border-color: #b98962; }
+  .avatar-row:hover #avatarBox, #avatarBox { border-color: #c7a787; box-shadow: 0 0 0 4px rgba(187,142,99,.12); }
+  #progress { box-shadow: none; }
+  .timeline::before { background: linear-gradient(var(--cyan),#d9bda1,transparent); }
+  @media (max-width: 720px) {
+    nav.links { background: rgba(250,244,234,.98); box-shadow: 0 15px 35px rgba(91,61,32,.13); }
+    #stars { opacity: .20; }
+    .facts { gap: 18px; }
+  }
+  @media (max-width: 720px) and (orientation: portrait) {
+    #wallpaper { opacity: .18; }
+    #bgShade { background: linear-gradient(180deg,rgba(247,240,229,.56),rgba(247,240,229,.72)); }
+  }
+  /* 参考截图的留白、悬浮导航和大字层次，沿用原页面结构。 */
+  :root { --bg: #fffaf3; --bg-soft: #fcf0e2; --text: #302c29; --muted: #786e64; --cyan: #a85e2e; --violet: #ca8760; --glass: rgba(255,253,249,.91); --radius: 26px; --max: 1200px; }
+  header.nav, header.nav.scrolled {
+    top: 16px; left: 24px; right: 24px; max-width: 1200px; margin: 0 auto;
+    border: 1px solid rgba(166,126,87,.16); border-radius: 22px;
+    padding: 14px 22px; background: rgba(255,253,249,.93);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 16px 45px rgba(92,67,42,.07);
+  }
+  .brand { gap: 12px; letter-spacing: 0; }
+  .brand .mark { width: 38px; height: 38px; background: #fcf0df; border-radius: 12px; }
+  .brand-name { line-height: 1.3; }
+  .brand-en { display: block; font-size: 9px; letter-spacing: .15em; color: var(--muted); margin-top: 4px; }
+  nav.links a { font-size: 13px; font-weight: 600; padding: 9px 12px; }
+  nav.links a:last-child { margin-left: 10px; background: #42372e; color: #fffaf3; border-radius: 13px; padding-inline: 22px; }
+  #hero { align-items: center; text-align: center; padding-top: 160px; padding-bottom: 100px; }
+  #hero .hi { font-size: 12px; letter-spacing: .09em; }
+  #hero h1 { margin: 14px 0 22px; line-height: 1.12; }
+  .hero-greeting { display: block; font-size: clamp(22px,3vw,32px); font-weight: 500; letter-spacing: .02em; margin-bottom: 20px; }
+  #hero h1 .glow { display: block; font-size: clamp(70px,10vw,116px); letter-spacing: -.05em; color: #b86e3d; }
+  .hero-en { display: block; font-size: clamp(19px,3vw,28px); letter-spacing: .24em; color: #806650; margin-top: 12px; padding-left: .24em; }
+  .typed-wrap { font-size: clamp(17px,2.5vw,22px); margin-bottom: 20px; min-height: 1.8em; }
+  #hero .lede { max-width: 670px; font-size: 16px; line-height: 2; }
+  .cta { justify-content: center; gap: 12px; }
+  .btn { border-radius: 15px; padding: 14px 24px; font-size: 14px; }
+  .btn.primary { background: #a96539; }
+  .facts { justify-content: center; gap: 46px; margin-top: 38px; padding-top: 24px; }
+  .fact b { font-size: 24px; color: #6f5440; }
+  .fact span { font-size: 12px; }
+  .scroll-hint { bottom: 16px; font-size: 9px; }
+  .scroll-hint .rail { height: 22px; }
+  section:not(#hero) { padding-top: 100px; padding-bottom: 100px; }
+  h2.title { font-size: clamp(30px,4.6vw,54px); letter-spacing: -.04em; margin-bottom: 26px; }
+  .eyebrow { font-size: 11px; letter-spacing: .16em; }
+  .section-intro { max-width: 620px; font-size: 15px; margin-bottom: 36px; }
+  .about-grid { gap: 26px; }
+  .card { padding: 32px; }
+  .about-grid p.body { line-height: 2; font-size: 15px; }
+  .skills-grid { gap: 22px; }
+  .skill { padding: 28px; }
+  .interest-grid { gap: 22px; }
+  .interest { padding: 30px; }
+  .project { min-height: 310px; }
+  .project:nth-child(1) { background: rgba(255,244,226,.94); }
+  .project:nth-child(2) { background: rgba(249,244,234,.94); }
+  .project:nth-child(3) { background: rgba(252,239,231,.94); }
+  .project h3 { font-size: 21px; line-height: 1.5; }
+  .project p { line-height: 1.9; }
+  .chip { font-size: 11px; padding: 4px 10px; }
+  .tl-item { padding-bottom: 38px; }
+  .tl-item h3 { font-size: 20px; }
+  #wallpaper { opacity: .26; }
+  #bgShade { background: linear-gradient(90deg,rgba(255,250,243,.88),rgba(255,250,243,.68) 50%,rgba(255,250,243,.40)),linear-gradient(180deg,rgba(255,245,228,.16),rgba(255,250,243,.55)); }
+  @media (max-width: 900px) {
+    header.nav, header.nav.scrolled { padding: 12px 16px; }
+    nav.links a { padding: 9px 8px; }
+    nav.links a:last-child { margin-left: 0; padding-inline: 12px; }
+    .project { min-height: 0; }
+  }
+  @media (max-width: 720px) {
+    header.nav, header.nav.scrolled { top: 10px; left: 12px; right: 12px; border-radius: 18px; }
+    nav.links { inset: 76px 0 auto 0; max-height: calc(100svh - 110px); overflow-y: auto; }
+    nav.links a, nav.links a:last-child { padding: 12px 14px; }
+    #hero { padding-top: 130px; padding-bottom: 80px; }
+    #hero .hi { font-size: 11px; flex-wrap: wrap; justify-content: center; letter-spacing: 0; }
+    #hero .lede { font-size: 14px; text-align: left; }
+    .typed-wrap { font-size: 16px; }
+    .cta { gap: 8px; }
+    .btn { font-size: 12px; padding: 12px 15px; }
+    .facts { gap: 22px; width: 100%; }
+    .fact b { font-size: 21px; }
+    .fact span { font-size: 10px; letter-spacing: 0; }
+    section:not(#hero) { padding-top: 64px; padding-bottom: 64px; }
+    .card, .skill, .interest { padding: 24px; }
+    .about-grid p.body { font-size: 14px; }
+    .project h3 { font-size: 20px; }
+  }
+  @media (max-width: 720px) and (orientation: portrait) {
+    #wallpaper { opacity: .22; }
+    #bgShade { background: linear-gradient(180deg,rgba(255,250,243,.60),rgba(255,250,243,.76)); }
+  }
+  /* 当前暖色壁纸：桌面完整居中，手机按视口等比例裁切。 */
+  #wallpaper {
+    background-position: center center;
+    background-size: contain;
+    opacity: .52;
+  }
+  #bgShade {
+    background: linear-gradient(90deg,rgba(255,250,243,.65),rgba(255,250,243,.35) 30%,rgba(255,250,243,.35) 70%,rgba(255,250,243,.65)),
+      linear-gradient(180deg,rgba(255,250,243,.15),rgba(255,250,243,.48));
+  }
+  @media (max-width: 720px) and (orientation: portrait) {
+    #wallpaper {
+      background-size: cover;
+      background-position: center center;
+      opacity: .42;
+    }
+    #bgShade { background: linear-gradient(180deg,rgba(255,250,243,.48),rgba(255,250,243,.64)); }
+  }
+  @media (max-height: 540px) and (orientation: landscape) {
+    #wallpaper { background-size: contain; background-position: center center; }
+  }
 </style>
 </head>
 <body>
+<div id="wallpaper" aria-hidden="true"></div>
 <div id="bgShade" aria-hidden="true"></div>
 <div id="progress" aria-hidden="true"></div>
 <canvas id="stars" aria-hidden="true"></canvas>
@@ -754,12 +939,12 @@
 <header class="nav" id="navbar">
   <a class="brand" href="#hero">
     <span class="mark">🚗</span>
-    天宇<span class="dot">.</span>
+    <span class="brand-name">李天宇<span class="brand-en">TYUN / 日常与学习</span></span>
   </a>
   <nav class="links" id="navlinks">
     <a href="#about">关于我</a>
     <a href="#skills">技能</a>
-    <a href="#projects">项目</a>
+    <a href="#campus">日常</a>
     <a href="#interests">方向</a>
     <a href="#journey">经历</a>
     <a href="#contact">联系</a>
@@ -773,18 +958,18 @@
   <!-- ========== 首屏 ========== -->
   <section id="hero">
     <p class="hi"><span class="pulse"></span>沈阳理工大学 · 车辆工程 · 2026 级本科生</p>
-    <h1><span class="glow">你好，我是天宇</span></h1>
+    <h1><span class="hero-greeting">你好，我是</span><span class="glow">李天宇<span class="hero-en">TYUN</span></span></h1>
     <div class="typed-wrap">
-      <span class="prefix">我的方向&nbsp;</span><span id="typed"></span><span class="caret"></span>
+      <span class="prefix">我是一名&nbsp;</span><span id="typed"></span><span class="caret"></span>
     </div>
     <p class="lede">
-      我是天宇 / TYUN，一名车辆工程学生，也是智能汽车方向的学习者。
-      从 C 语言打基础，用 Python 做小项目，下一站是 STM32 单片机开发。
-      希望让课堂上的车辆知识与自己写下的代码，在未来的新能源汽车上相遇。
+      在沈阳理工大学读车辆工程，2026 级。最近在学 C 语言，也用 Python 写了一个猜数字小游戏。
+      接下来想试试 STM32，看看代码是怎么让电机转起来的。这里放一些练习，也记下大学里慢慢学会的东西。
     </p>
     <div class="cta">
-      <a class="btn primary" href="#about">认识我一下 →</a>
-      <a class="btn ghost" href="#projects">看看我的项目 →</a>
+      <a class="btn primary" href="#about">关于我 →</a>
+      <a class="btn ghost" href="#campus">看看大学日常 →</a>
+      <a class="btn ghost" href="https://github.com/xingliaoyuan" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
     </div>
 
     <div class="facts">
@@ -805,9 +990,9 @@
     <h2 class="title reveal">关于<em>我</em></h2>
     <div class="about-grid">
       <div class="card reveal" data-tilt>
-        <p class="body">我叫<strong>天宇 / TYUN</strong>，是<strong>沈阳理工大学车辆工程专业的 2026 级本科生</strong>。选择车辆工程，是因为我想理解一辆车如何从机械结构、动力系统到控制逻辑协同运转，也希望以后能参与它的设计与开发。</p>
-        <p class="body">我尤其关注<strong>新能源汽车与智能汽车</strong>：电机如何响应控制指令，传感器怎样感知环境，软件又如何让车辆做出反应。这些问题让我想从“了解车”再往前走一步，学习车辆背后的代码与电子系统。</p>
-        <p class="body">现在，我正在系统学习<strong>C 语言</strong>，已经用<strong>Python 完成猜数字小游戏</strong>，接下来准备学习<strong>STM32</strong>。先写好基础程序，再尝试传感器与电机控制，一步步把车辆知识和代码结合起来，向新能源汽车与嵌入式方向成长。</p>
+        <p class="body">我叫<strong>李天宇 / TYUN</strong>，是<strong>沈阳理工大学车辆工程专业的 2026 级本科生</strong>。选这个专业，是想弄明白车为什么能跑、各个部分是怎么配合的。以后也想做一些和汽车开发有关的工作。</p>
+        <p class="body">我对<strong>新能源汽车和智能汽车</strong>比较感兴趣。比如电机怎么控制、传感器读到的数据怎么用，这些都是我想慢慢弄懂的问题，也是我开始学编程的原因。</p>
+        <p class="body">现在，我正在系统学习<strong>C 语言</strong>，已经用<strong>Python 完成猜数字小游戏</strong>，接下来准备学习<strong>STM32</strong>。暂时先把基础练好。等接触了硬件，想试着做点和传感器、电机有关的小东西，看看专业课和编程能怎么用到一起。</p>
         <div class="chips">
           <span class="chip"># 车辆工程</span><span class="chip"># 新能源汽车</span>
           <span class="chip"># C / Python</span><span class="chip"># STM32 下一站</span>
@@ -817,11 +1002,11 @@
       <div class="card idcard reveal" data-tilt>
         <div class="avatar-row">
           <div id="avatarBox">
-            <img id="avatar" src="avatar.jpg" alt="天宇的头像" width="136" height="136" decoding="async" />
+            <img id="avatar" src="avatar.jpg" alt="李天宇的头像" width="136" height="136" decoding="async" />
             <canvas id="avatarFallback" width="136" height="136" aria-hidden="true"></canvas>
           </div>
           <div class="who">
-            <b>天宇 / TYUN</b>
+            <b>李天宇 / TYUN</b>
             <span>车辆工程 · 智能汽车方向学习者</span>
           </div>
         </div>
@@ -841,8 +1026,8 @@
   <!-- ========== 技能 ========== -->
   <section id="skills">
     <p class="eyebrow reveal">Skills &amp; Learning</p>
-    <h2 class="title reveal">从代码基础，到<em>车辆控制</em></h2>
-    <p class="section-intro reveal">学习路线：C 语言打基础 · Python 项目实践 · STM32 单片机入门 · 智能汽车探索</p>
+    <h2 class="title reveal">最近在<em>学什么</em></h2>
+    <p class="section-intro reveal">先把 C 语言和 Python 的基础写熟，再开始接触 STM32。</p>
     <div class="skills-grid">
       <div class="skill reveal">
         <div class="stage"><span class="stage-label">系统学习中</span><span class="dots" data-level="1" aria-hidden="true"><i></i><i></i><i></i></span></div>
@@ -863,26 +1048,26 @@
     </div>
   </section>
 
-  <!-- ========== 项目 ========== -->
-  <section id="projects">
-    <p class="eyebrow reveal">Projects</p>
-    <h2 class="title reveal">把学到的，<em>做出来</em></h2>
-    <p class="section-intro reveal">从第一个小游戏到未来的智能车，这里记录我的动手实践与下一步计划。</p>
+  <!-- ========== 大学日常 ========== -->
+  <section id="campus">
+    <p class="eyebrow reveal">Campus Life</p>
+    <h2 class="title reveal">我的<em>大学日常</em></h2>
+    <p class="section-intro reveal">上课、学点编程，也给社团和校园生活留一点位置。</p>
     <div class="projects-grid">
       <article class="card project reveal" data-tilt>
-        <div class="project-top"><span class="project-number">01 /</span><span class="chip">已完成</span></div>
-        <h3>Python 猜数字小游戏</h3><p>一个在命令行中运行的小游戏。通过随机数生成目标，用逻辑判断比较输入与答案，把学到的 Python 基础串成一个完整的小项目。</p>
-        <div class="chips"><span class="chip">Python</span><span class="chip">命令行小游戏</span><span class="chip">随机数</span><span class="chip">逻辑判断</span></div>
+        <div class="project-top"><span class="project-number">01 /</span><span class="chip">课堂与课外</span></div>
+        <h3>课程学习</h3><p>在沈阳理工大学读车辆工程，先把专业基础学扎实。课外正在学 C 语言和 Python，有不懂的地方就回头补，再写几个程序试试。</p>
+        <div class="chips"><span class="chip">车辆工程</span><span class="chip">C 语言</span><span class="chip">Python</span></div>
       </article>
       <article class="card project reveal" data-tilt>
-        <div class="project-top"><span class="project-number">02 /</span><span class="chip">练习中</span></div>
-        <h3>C 语言学习项目</h3><p>从基础程序练习开始，围绕变量、输入输出与条件判断反复动手，记录每一次把思路写成代码的过程。</p>
-        <div class="chips"><span class="chip">C 语言</span><span class="chip">基础程序练习</span></div>
+        <div class="project-top"><span class="project-number">02 /</span><span class="chip">一起学习</span></div>
+        <h3>社团活动</h3><p>加入了计算机协会和智能车社团。希望认识一些也喜欢写代码、折腾硬件的同学，之后一起试试 STM32 和智能车。</p>
+        <div class="chips"><span class="chip">计算机协会</span><span class="chip">智能车社团</span></div>
       </article>
       <article class="card project reveal" data-tilt>
-        <div class="project-top"><span class="project-number">03 /</span><span class="chip">Coming Soon</span></div>
-        <h3>智能车项目</h3><p>计划以 STM32 为起点，学习电机控制与传感器应用，尝试把车辆知识和嵌入式代码结合起来。</p>
-        <div class="chips"><span class="chip">STM32</span><span class="chip">电机控制</span><span class="chip">传感器</span></div>
+        <div class="project-top"><span class="project-number">03 /</span><span class="chip">慢慢记录</span></div>
+        <h3>校园生活</h3><p>大学生活不只有课程和代码。这里留给以后想记下来的校园片段，有照片、有故事的时候，再慢慢添进来。</p>
+        <div class="chips"><span class="chip">沈阳理工大学</span><span class="chip">2026 级</span><span class="chip">日常随记</span></div>
       </article>
     </div>
   </section>
@@ -927,7 +1112,7 @@
 
   <!-- ========== 经历 ========== -->
   <section id="journey">
-    <p class="eyebrow reveal">Journey</p><h2 class="title reveal">我的<em>成长时间线</em></h2>
+    <p class="eyebrow reveal">Journey</p><h2 class="title reveal">大学里的<em>几个节点</em></h2>
     <div class="timeline"><div class="tl-item reveal"><span class="when">2026</span><h3>进入沈阳理工大学车辆工程专业</h3><p>成为 2026 级本科生，从专业知识出发，开始理解车辆结构、动力与控制之间的联系。</p></div>
       <div class="tl-item reveal"><span class="when">2026</span><h3>开始学习 C 语言、Python</h3><p>用 C 语言建立编程基础，用 Python 完成猜数字小游戏，开始把想法写成能运行的程序。</p></div>
       <div class="tl-item reveal"><span class="when">2026</span><h3>加入计算机协会和智能车社团</h3><p>和有共同兴趣的同学一起学习，寻找从编程练习走向硬件实践与智能车项目的机会。</p></div>
@@ -937,9 +1122,9 @@
   <!-- ========== 联系 ========== -->
   <section id="contact">
     <p class="eyebrow reveal">Contact</p>
-    <h2 class="title reveal">聊聊车，也<em>聊聊代码</em></h2>
+    <h2 class="title reveal">可以在这里<em>找到我</em></h2>
     <p class="sub reveal">
-      欢迎来我的 GitHub 主页看看。如果你也在学习编程、STM32 或智能汽车，期待一起交流学习中的发现。
+      我的 GitHub 放在下面。如果你也在学编程，或者是同校同学，欢迎来交流。
     </p>
     <div class="contact-list reveal">
       <div class="contact-item">
@@ -950,7 +1135,7 @@
         <span class="emoji">📧</span>
         <span><span class="k">邮箱</span><span class="v">暂不公开</span></span>
       </div>
-      <a class="contact-item" href="https://github.com/xingliaoyuan" target="_blank" rel="noopener noreferrer" aria-label="访问天宇的 GitHub 主页（新窗口）">
+      <a class="contact-item" href="https://github.com/xingliaoyuan" target="_blank" rel="noopener noreferrer" aria-label="访问李天宇的 GitHub 主页（新窗口）">
         <span class="emoji">🐙</span>
         <span><span class="k">GitHub 主页 ↗</span><span class="v">@xingliaoyuan</span></span>
       </a>
@@ -960,7 +1145,7 @@
 </main>
 
 <footer>
-  © <span id="year">2026</span> <b>天宇</b> · 沈阳理工大学 车辆工程 · 2026 级本科生 · 用代码探索未来汽车
+  © <span id="year">2026</span> <b>李天宇</b> · 沈阳理工大学 车辆工程 · 2026 级本科生 · 学一点，记一点
 </footer>
 
 <script>
@@ -1013,7 +1198,7 @@
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(180, 214, 255, " + p.a + ")";
+        ctx.fillStyle = "rgba(137, 92, 54, " + p.a + ")";
         ctx.fill();
 
         for (var j = i + 1; j < pts.length; j++) {
@@ -1024,7 +1209,7 @@
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(q.x, q.y);
-            ctx.strokeStyle = "rgba(34, 211, 238, " + (0.16 * (1 - d / link)) + ")";
+            ctx.strokeStyle = "rgba(164, 116, 71, " + (0.16 * (1 - d / link)) + ")";
             ctx.lineWidth = dpr * 0.6;
             ctx.stroke();
           }
@@ -1036,7 +1221,7 @@
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(mouse.x, mouse.y);
-          ctx.strokeStyle = "rgba(139, 92, 246, " + (0.3 * (1 - md / (150 * dpr))) + ")";
+          ctx.strokeStyle = "rgba(184, 124, 93, " + (0.3 * (1 - md / (150 * dpr))) + ")";
           ctx.lineWidth = dpr * 0.7;
           ctx.stroke();
         }
@@ -1070,7 +1255,7 @@
   (function typing() {
     var el = document.getElementById("typed");
     if (!el) return;
-    var list = ["车辆工程学生", "智能汽车方向学习者", "C 语言 / Python / STM32", "用代码探索新能源汽车"];
+    var list = ["车辆工程学生", "正在学习编程的本科生", "对智能汽车好奇的学习者"];
     if (reduce) { el.textContent = list[0]; return; }
     var li = 0, ci = 0, del = false;
     function tick() {
@@ -1236,10 +1421,10 @@
       ctx.globalAlpha = 1;
 
       ctx.fillStyle = "#f8fbff";
-      ctx.font = "700 " + Math.round(size * 0.42) + "px 'PingFang SC','Microsoft YaHei',sans-serif";
+      ctx.font = "700 " + Math.round(size * 0.29) + "px 'PingFang SC','Microsoft YaHei',sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("天宇", size / 2, size / 2 + size * 0.02);
+      ctx.fillText("李天宇", size / 2, size / 2 + size * 0.02);
 
       img.style.display = "none";
       cv.style.display = "block";
@@ -1252,55 +1437,7 @@
     }
   })();
 
-  /* ---------- 10. 背景插画取景：保证人物完整可见 ---------- */
-  (function backdrop() {
-    var IMG_W = 1080, IMG_H = 1620;   /* background.jpg 的实际尺寸 */
-    var RATIO = IMG_W / IMG_H;
-    var FIGURE_TOP = 0.10;            /* 原图中人物的纵向范围（比例，实测取材） */
-    var FIGURE_BOTTOM = 0.78;
-
-    function fit() {
-      var vw = window.innerWidth;
-      var vh = window.innerHeight;
-      if (!vw || !vh) return;
-
-      /* cover 所需的缩放：铺满视口 */
-      var sCover = Math.max(vw / IMG_W, vh / IMG_H);
-      /* 让人物完整落在视口内所需的缩放（留出上下少量余量） */
-      var sFigure = (vh * 0.96) / (IMG_H * (FIGURE_BOTTOM - FIGURE_TOP));
-
-      var size, pos;
-      if (sCover <= sFigure) {
-        /* 视口够窄：直接 cover，人物本来就装得下 */
-        size = "cover";
-        pos = "center 22%";
-      } else {
-        /* 视口较宽：把插画缩到人物刚好填满视口高度，水平居中 */
-        size = Math.round(IMG_H * sFigure) + "px auto";
-        pos = "center center";
-      }
-
-      document.body.style.backgroundSize = size;
-      document.body.style.backgroundPosition = pos;
-    }
-
-    /* 手机上竖向空间宝贵，用 cover + 顶部取景更自然 */
-    function apply() {
-      if (window.innerWidth <= 720) {
-        document.body.style.backgroundSize = "cover";
-        document.body.style.backgroundPosition = "center 20%";
-      } else {
-        fit();
-      }
-    }
-
-    var raf = null;
-    window.addEventListener("resize", function () {
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(apply);
-    });
-    apply();
-  })();
+  /* ---------- 10. 背景由独立固定层与响应式 CSS 取景 ---------- */
 
   /* ---------- 11. 年份 ---------- */
   var y = document.getElementById("year");
