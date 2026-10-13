@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>天宇的个人主页 | 车辆工程 · 编程入门中</title>
-<meta name="description" content="天宇，沈阳理工大学车辆工程专业 2026 级大一学生，正在学习 C/C++ 编程基础，对汽车、智能汽车与新能源汽车感兴趣。" />
+<title>天宇 TYUN | 车辆工程 · 智能汽车 · 成长记录</title>
+<meta name="description" content="天宇 TYUN，沈阳理工大学车辆工程专业 2026 级本科生。记录 C 语言、Python 与 STM32 学习路线，探索智能汽车、新能源汽车和嵌入式开发。" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚗</text></svg>" />
 <style>
   /* ===================== 设计变量 ===================== */
@@ -687,6 +687,21 @@
   }
   footer b { color: var(--text); font-weight: 600; }
 
+  /* 新增模块沿用原有玻璃卡片、配色与交互 */
+  section { scroll-margin-top: 76px; }
+  .section-intro { color: var(--muted); margin: 0 0 28px; max-width: 680px; }
+  .projects-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .project { display: flex; flex-direction: column; min-width: 0; }
+  .project-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .project-number { color: var(--muted); font: 14px monospace; letter-spacing: .1em; }
+  .project h3 { font-size: 19px; margin: 24px 0 12px; }
+  .project p { color: var(--muted); font-size: 14px; margin: 0 0 24px; }
+  .project .chips { margin-top: auto; }
+  .contact-item:not(a) { cursor: default; border-style: dashed; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
+  @media (max-width: 900px) { .projects-grid { grid-template-columns: 1fr; } }
+  @media (min-width: 721px) and (max-width: 900px) { nav.links a { padding-inline: 9px; } }
+
   /* ===================== 响应式 ===================== */
   @media (max-width: 900px) {
     .about-grid { grid-template-columns: 1fr; }
@@ -744,7 +759,8 @@
   <nav class="links" id="navlinks">
     <a href="#about">关于我</a>
     <a href="#skills">技能</a>
-    <a href="#interests">兴趣</a>
+    <a href="#projects">项目</a>
+    <a href="#interests">方向</a>
     <a href="#journey">经历</a>
     <a href="#contact">联系</a>
   </nav>
@@ -756,24 +772,25 @@
 <main>
   <!-- ========== 首屏 ========== -->
   <section id="hero">
-    <p class="hi"><span class="pulse"></span>沈阳理工大学 · 车辆工程 · 2026 级在读</p>
+    <p class="hi"><span class="pulse"></span>沈阳理工大学 · 车辆工程 · 2026 级本科生</p>
     <h1><span class="glow">你好，我是天宇</span></h1>
     <div class="typed-wrap">
-      <span class="prefix">一个刚起步的&nbsp;</span><span id="typed"></span><span class="caret"></span>
+      <span class="prefix">我的方向&nbsp;</span><span id="typed"></span><span class="caret"></span>
     </div>
     <p class="lede">
-      沈阳理工大学车辆工程专业 2026 级新生。现在每天在学的就两件事：编程基础，和车辆工程的专业课。
-      这个页面用来记一下我学到哪儿了、对什么感兴趣，也写给以后的自己看。
+      我是天宇 / TYUN，一名车辆工程学生，也是智能汽车方向的学习者。
+      从 C 语言打基础，用 Python 做小项目，下一站是 STM32 单片机开发。
+      希望让课堂上的车辆知识与自己写下的代码，在未来的新能源汽车上相遇。
     </p>
     <div class="cta">
       <a class="btn primary" href="#about">认识我一下 →</a>
-      <a class="btn ghost" href="#journey">看看我在学什么</a>
+      <a class="btn ghost" href="#projects">看看我的项目 →</a>
     </div>
 
     <div class="facts">
       <div class="fact"><b data-count="1">0</b><span>大学第一年</span></div>
       <div class="fact"><b data-count="4" data-suffix=" 个">0</b><span>感兴趣的方向</span></div>
-      <div class="fact"><b data-count="1" data-suffix=" 年">0</b><span>编程刚入门</span></div>
+      <div class="fact"><b data-count="1" data-suffix=" 个">0</b><span>已完成 Python 小项目</span></div>
     </div>
 
     <div class="scroll-hint" aria-hidden="true">
@@ -788,24 +805,12 @@
     <h2 class="title reveal">关于<em>我</em></h2>
     <div class="about-grid">
       <div class="card reveal" data-tilt>
-        <p class="body">
-          我叫<strong>天宇</strong>，2026 年入学，现在在<strong>沈阳理工大学</strong>读<strong>车辆工程</strong>，大一。
-          报这个专业的原因挺简单：从小就对车感兴趣，路上见到不认识的车型会忍不住去查一查它是什么车、多少钱、什么动力。
-        </p>
-        <p class="body">
-          上了大学之后，除了专业课，我还想弄明白一件事——<strong>现在的车为什么越来越像一台电脑</strong>。
-          所以这学期我给自己加了一门“课外必修”：学编程。从 <strong>C 语言</strong>开始，现在也刚开始碰一点 C++。
-          目前还处在最基础的阶段，写得出能跑的小程序，但离“会写代码”还差得远，经常被一个报错卡半天。
-        </p>
-        <p class="body">
-          我没打算把话说得太满。接下来的计划很朴素：<strong>把编程基础一点点补上，把专业课认真学好</strong>，
-          有空就多看看智能汽车和新能源汽车方面的东西，等基础够了，再试试把这两个方向凑到一起做点小东西。
-        </p>
+        <p class="body">我叫<strong>天宇 / TYUN</strong>，是<strong>沈阳理工大学车辆工程专业的 2026 级本科生</strong>。选择车辆工程，是因为我想理解一辆车如何从机械结构、动力系统到控制逻辑协同运转，也希望以后能参与它的设计与开发。</p>
+        <p class="body">我尤其关注<strong>新能源汽车与智能汽车</strong>：电机如何响应控制指令，传感器怎样感知环境，软件又如何让车辆做出反应。这些问题让我想从“了解车”再往前走一步，学习车辆背后的代码与电子系统。</p>
+        <p class="body">现在，我正在系统学习<strong>C 语言</strong>，已经用<strong>Python 完成猜数字小游戏</strong>，接下来准备学习<strong>STM32</strong>。先写好基础程序，再尝试传感器与电机控制，一步步把车辆知识和代码结合起来，向新能源汽车与嵌入式方向成长。</p>
         <div class="chips">
-          <span class="chip"># 车辆工程</span>
-          <span class="chip"># C / C++ 入门中</span>
-          <span class="chip"># 汽车爱好者</span>
-          <span class="chip"># 大一新生</span>
+          <span class="chip"># 车辆工程</span><span class="chip"># 新能源汽车</span>
+          <span class="chip"># C / Python</span><span class="chip"># STM32 下一站</span>
         </div>
       </div>
 
@@ -816,16 +821,17 @@
             <canvas id="avatarFallback" width="136" height="136" aria-hidden="true"></canvas>
           </div>
           <div class="who">
-            <b>天宇</b>
-            <span>车辆工程 · 2026 级大一</span>
+            <b>天宇 / TYUN</b>
+            <span>车辆工程 · 智能汽车方向学习者</span>
           </div>
         </div>
         <dl class="meta">
           <div><dt>学校</dt><dd>沈阳理工大学</dd></div>
           <div><dt>专业</dt><dd>车辆工程</dd></div>
-          <div><dt>年级</dt><dd>2026 级 大一</dd></div>
+          <div><dt>年级</dt><dd>2026 级本科生</dd></div>
           <div><dt>城市</dt><dd>辽宁 · 沈阳</dd></div>
-          <div><dt>正在学</dt><dd>C / C++ 编程基础</dd></div>
+          <div><dt>正在学</dt><dd>C 语言 / Python</dd></div>
+          <div><dt>下一站</dt><dd>STM32 · 嵌入式开发</dd></div>
           <div><dt>状态</dt><dd style="color:#34d399">大一在读 · 基础阶段</dd></div>
         </dl>
       </div>
@@ -834,58 +840,50 @@
 
   <!-- ========== 技能 ========== -->
   <section id="skills">
-    <p class="eyebrow reveal">Skills</p>
-    <h2 class="title reveal">正在学的<em>东西</em></h2>
+    <p class="eyebrow reveal">Skills &amp; Learning</p>
+    <h2 class="title reveal">从代码基础，到<em>车辆控制</em></h2>
+    <p class="section-intro reveal">学习路线：C 语言打基础 · Python 项目实践 · STM32 单片机入门 · 智能汽车探索</p>
     <div class="skills-grid">
       <div class="skill reveal">
-        <div class="stage">
-          <span class="stage-label">学习中</span>
-          <span class="dots" data-level="2" role="img" aria-label="学习程度：3 级中的第 2 级"><i></i><i></i><i></i></span>
-        </div>
-        <h3><i>💻</i>C 语言</h3>
-        <p>学校课程和自己找的教程同时在跟。变量、循环、函数、数组这些能用了，指针和文件操作还在反复绕，
-          写得出能跑的小程序，但还经常被报错卡住。</p>
+        <div class="stage"><span class="stage-label">系统学习中</span><span class="dots" data-level="1" aria-hidden="true"><i></i><i></i><i></i></span></div>
+        <h3><i>💻</i>C 语言</h3><p>正在系统学习，掌握变量、输入输出、条件判断等基础。通过基础程序练习，把语法逐步变成自己能写出来的逻辑。</p>
       </div>
-
       <div class="skill reveal">
-        <div class="stage">
-          <span class="stage-label">刚接触</span>
-          <span class="dots" data-level="1" role="img" aria-label="学习程度：3 级中的第 1 级"><i></i><i></i><i></i></span>
-        </div>
-        <h3><i>➕</i>C++</h3>
-        <p>刚开始看一点，多数时候还在“把 C 的写法套过来”。类和对象这些概念还没真正学明白，
-          目前只是知道大概是什么东西。</p>
+        <div class="stage"><span class="stage-label">完成首个小项目</span><span class="dots" data-level="1" aria-hidden="true"><i></i><i></i><i></i></span></div>
+        <h3><i>🐍</i>Python</h3><p>完成过猜数字小游戏项目，用随机数和逻辑判断搭建命令行交互，在动手实践中理解程序的执行过程。</p>
       </div>
-
       <div class="skill reveal">
-        <div class="stage">
-          <span class="stage-label">入门中</span>
-          <span class="dots" data-level="1" role="img" aria-label="学习程度：3 级中的第 1 级"><i></i><i></i><i></i></span>
-        </div>
-        <h3><i>📐</i>编程基础与算法</h3>
-        <p>知道排序、查找是怎么回事，但还没系统练过。打算先把编程基础写熟一点，再认真补这块，
-          不想在基础不牢的时候硬啃难题。</p>
+        <div class="stage"><span class="stage-label">即将开始</span><span class="dots" data-level="0" aria-hidden="true"><i></i><i></i><i></i></span></div>
+        <h3><i>🔌</i>STM32</h3><p>即将开始学习单片机开发。计划从基础外设入手，逐步尝试传感器读取与电机控制，让代码与硬件产生连接。</p>
       </div>
-
       <div class="skill reveal">
-        <div class="stage">
-          <span class="stage-label">大一课程</span>
-          <span class="dots" data-level="1" role="img" aria-label="学习程度：3 级中的第 1 级"><i></i><i></i><i></i></span>
-        </div>
-        <h3><i>🔧</i>车辆工程专业课</h3>
-        <p>正在上专业导论、机械制图这类入门课程，课堂上讲的很多东西对我来说都还是新的。
-          课外会自己刷汽车评测和技术解析，看得懂的部分越来越多，但离“懂车”还很远。</p>
+        <div class="stage"><span class="stage-label">未来方向</span><span class="dots" data-level="0" aria-hidden="true"><i></i><i></i><i></i></span></div>
+        <h3><i>🚗</i>智能汽车</h3><p>未来希望探索的方向。先积累车辆工程、编程与嵌入式基础，再尝试把感知、控制与车辆系统联系起来。</p>
       </div>
+    </div>
+  </section>
 
-      <div class="skill reveal">
-        <div class="stage">
-          <span class="stage-label">初步接触</span>
-          <span class="dots" data-level="1" role="img" aria-label="学习程度：3 级中的第 1 级"><i></i><i></i><i></i></span>
-        </div>
-        <h3><i>🛠️</i>工具与编辑器</h3>
-        <p>会用编辑器写代码、点一下按钮把程序编译运行起来。版本管理、调试工具这些还完全没上道，
-          遇到问题主要还是靠搜索和问人。</p>
-      </div>
+  <!-- ========== 项目 ========== -->
+  <section id="projects">
+    <p class="eyebrow reveal">Projects</p>
+    <h2 class="title reveal">把学到的，<em>做出来</em></h2>
+    <p class="section-intro reveal">从第一个小游戏到未来的智能车，这里记录我的动手实践与下一步计划。</p>
+    <div class="projects-grid">
+      <article class="card project reveal" data-tilt>
+        <div class="project-top"><span class="project-number">01 /</span><span class="chip">已完成</span></div>
+        <h3>Python 猜数字小游戏</h3><p>一个在命令行中运行的小游戏。通过随机数生成目标，用逻辑判断比较输入与答案，把学到的 Python 基础串成一个完整的小项目。</p>
+        <div class="chips"><span class="chip">Python</span><span class="chip">命令行小游戏</span><span class="chip">随机数</span><span class="chip">逻辑判断</span></div>
+      </article>
+      <article class="card project reveal" data-tilt>
+        <div class="project-top"><span class="project-number">02 /</span><span class="chip">练习中</span></div>
+        <h3>C 语言学习项目</h3><p>从基础程序练习开始，围绕变量、输入输出与条件判断反复动手，记录每一次把思路写成代码的过程。</p>
+        <div class="chips"><span class="chip">C 语言</span><span class="chip">基础程序练习</span></div>
+      </article>
+      <article class="card project reveal" data-tilt>
+        <div class="project-top"><span class="project-number">03 /</span><span class="chip">Coming Soon</span></div>
+        <h3>智能车项目</h3><p>计划以 STM32 为起点，学习电机控制与传感器应用，尝试把车辆知识和嵌入式代码结合起来。</p>
+        <div class="chips"><span class="chip">STM32</span><span class="chip">电机控制</span><span class="chip">传感器</span></div>
+      </article>
     </div>
   </section>
 
@@ -922,58 +920,28 @@
       <article class="interest reveal" data-tilt>
         <div class="ico">📚</div>
         <h3>慢慢积累</h3>
-        <p>现在水平一般，但每天都在往前走一点。目标不大：这学期先把编程基础写熟，专业课不挂科。</p>
+        <p>把每一次练习、报错和解决问题的过程记下来。先写熟基础程序，再把小项目一点点推进，让成长有迹可循。</p>
       </article>
     </div>
   </section>
 
   <!-- ========== 经历 ========== -->
   <section id="journey">
-    <p class="eyebrow reveal">Journey</p>
-    <h2 class="title reveal">我的<em>时间线</em></h2>
-    <div class="timeline">
-      <div class="tl-item reveal">
-        <span class="when">2026 · 秋</span>
-        <h3>入学沈阳理工大学，成为车辆工程专业 2026 级新生</h3>
-        <p>正式开始大学生活。第一次有一整块时间可以系统地学自己感兴趣的东西，也有点紧张——
-          同专业的同学里，比我了解车的人应该不少。</p>
-      </div>
-      <div class="tl-item reveal">
-        <span class="when">2026 · 秋</span>
-        <h3>开始学 C 语言</h3>
-        <p>因为想弄明白车上的软件到底是怎么写的，就从 C 语言开始。第一行 Hello World 折腾了半天，
-          后来又被分号、数组越界和指针轮流教做人。</p>
-      </div>
-      <div class="tl-item reveal">
-        <span class="when">最近</span>
-        <h3>C 语言刚上手，又试着碰了一点 C++</h3>
-        <p>现在的情况是：简单的程序能自己写出来，遇到复杂一点的逻辑还是得慢慢想。
-          C++ 只能算“见过面”，远谈不上会。计划是先别贪多，把 C 的基础写熟。</p>
-      </div>
-      <div class="tl-item reveal">
-        <span class="when">现在</span>
-        <h3>跟着课程走，同时自己补编程</h3>
-        <p>专业课上认真听，课外每天留一点时间写代码。智能汽车、新能源汽车这些方向的东西，
-          目前主要是看和记，等基础好一些再动手试。</p>
-      </div>
-      <div class="tl-item reveal">
-        <span class="when">以后</span>
-        <h3>想试试把车和代码放在一起</h3>
-        <p>还没想好具体做哪个方向，也不着急定。先把编程和车辆工程的专业知识都学扎实，
-          以后再找机会做点和汽车、和代码都相关的东西。</p>
-      </div>
-    </div>
+    <p class="eyebrow reveal">Journey</p><h2 class="title reveal">我的<em>成长时间线</em></h2>
+    <div class="timeline"><div class="tl-item reveal"><span class="when">2026</span><h3>进入沈阳理工大学车辆工程专业</h3><p>成为 2026 级本科生，从专业知识出发，开始理解车辆结构、动力与控制之间的联系。</p></div>
+      <div class="tl-item reveal"><span class="when">2026</span><h3>开始学习 C 语言、Python</h3><p>用 C 语言建立编程基础，用 Python 完成猜数字小游戏，开始把想法写成能运行的程序。</p></div>
+      <div class="tl-item reveal"><span class="when">2026</span><h3>加入计算机协会和智能车社团</h3><p>和有共同兴趣的同学一起学习，寻找从编程练习走向硬件实践与智能车项目的机会。</p></div>
+      <div class="tl-item reveal"><span class="when">未来</span><h3>向新能源汽车 / 嵌入式方向发展</h3><p>下一站是 STM32、传感器与电机控制。希望在扎实的车辆工程基础上，用代码参与未来汽车的开发。</p></div></div>
   </section>
 
   <!-- ========== 联系 ========== -->
   <section id="contact">
     <p class="eyebrow reveal">Contact</p>
-    <h2 class="title reveal">联系方式<em>还没放上来</em></h2>
+    <h2 class="title reveal">聊聊车，也<em>聊聊代码</em></h2>
     <p class="sub reveal">
-      这个页面刚开始做，我还没想好把联系方式公开在这里，所以先留空——
-      与其写一个假的邮箱或者电话，不如什么都不写。等以后准备好了再补上。
+      欢迎来我的 GitHub 主页看看。如果你也在学习编程、STM32 或智能汽车，期待一起交流学习中的发现。
     </p>
-    <div class="contact-list contact-static reveal">
+    <div class="contact-list reveal">
       <div class="contact-item">
         <span class="emoji">💬</span>
         <span><span class="k">微信</span><span class="v">暂不公开</span></span>
@@ -982,17 +950,17 @@
         <span class="emoji">📧</span>
         <span><span class="k">邮箱</span><span class="v">暂不公开</span></span>
       </div>
-      <div class="contact-item">
+      <a class="contact-item" href="https://github.com/xingliaoyuan" target="_blank" rel="noopener noreferrer" aria-label="访问天宇的 GitHub 主页（新窗口）">
         <span class="emoji">🐙</span>
-        <span><span class="k">GitHub</span><span class="v">还没注册</span></span>
-      </div>
+        <span><span class="k">GitHub 主页 ↗</span><span class="v">@xingliaoyuan</span></span>
+      </a>
     </div>
     <p class="note reveal">如果你是同校或者同专业的同学，直接来找我聊就行，聊车、聊代码都可以。</p>
   </section>
 </main>
 
 <footer>
-  © <span id="year">2026</span> <b>天宇</b> · 沈阳理工大学 车辆工程 · 一个还在入门的大一学生
+  © <span id="year">2026</span> <b>天宇</b> · 沈阳理工大学 车辆工程 · 2026 级本科生 · 用代码探索未来汽车
 </footer>
 
 <script>
@@ -1102,7 +1070,7 @@
   (function typing() {
     var el = document.getElementById("typed");
     if (!el) return;
-    var list = ["车辆工程大一学生", "正在学 C 语言的编程新手", "喜欢研究车的人", "想把车和代码连起来的人"];
+    var list = ["车辆工程学生", "智能汽车方向学习者", "C 语言 / Python / STM32", "用代码探索新能源汽车"];
     if (reduce) { el.textContent = list[0]; return; }
     var li = 0, ci = 0, del = false;
     function tick() {
