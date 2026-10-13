@@ -1037,6 +1037,11 @@
   .favorite-name { font-size: 17px; overflow-wrap: anywhere; }
   .favorite-artist { display: block; color: var(--muted); font-size: 12px; margin-top: 3px; }
   @media (max-width: 720px) { .favorites-grid { grid-template-columns: 1fr; gap: 16px; } .favorite-group { padding: 20px; } }
+  /* 收起的菜单不能继续接受键盘焦点。 */
+  @media (max-width: 720px) {
+    nav.links { visibility: hidden; }
+    nav.links.open { visibility: visible; }
+  }
 </style>
 </head>
 <body>
@@ -1060,11 +1065,11 @@
     <a href="#skills">技能</a>
     <a href="#campus">日常</a>
     <a href="#interests">方向</a>
-    <a href="#hobbies">爱好</a>
     <a href="#journey">经历</a>
+    <a href="#hobbies">爱好</a>
     <a href="#contact">联系</a>
   </nav>
-  <button class="burger" id="burger" aria-label="打开导航菜单" aria-expanded="false">
+  <button class="burger" id="burger" aria-label="切换导航菜单" aria-controls="navlinks" aria-expanded="false">
     <i></i><i></i><i></i>
   </button>
 </header>
@@ -1237,9 +1242,14 @@
   <section id="journey" class="color-section">
 <div class="section-inner"><div class="section-heading"><div class="heading-main"><span class="section-index reveal" aria-hidden="true">05</span><p class="eyebrow reveal">Journey</p><h2 class="title reveal">大学里的<em>几个节点</em></h2></div><div class="heading-aside reveal"><span class="aside-label">走到这里</span><p>把大学里的几个节点，按顺序留在这里。</p></div></div>
     
-    <div class="timeline"><div class="tl-item reveal"><span class="when">2026</span><h3>进入沈阳理工大学车辆工程专业</h3><p>成为 2026 级本科生，从专业知识出发，开始理解车辆结构、动力与控制之间的联系。</p></div>
-      <div class="tl-item reveal"><span class="when">2026</span><h3>开始学习 C 语言、Python</h3><p>用 C 语言建立编程基础，用 Python 完成猜数字小游戏，开始把想法写成能运行的程序。</p></div>
-      <div class="tl-item reveal"><span class="when">2026</span><h3>加入计算机协会和智能车社团</h3><p>和有共同兴趣的同学一起学习，寻找从编程练习走向硬件实践与智能车项目的机会。</p></div>
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <span class="when">2026.09</span>
+        <h3>大学生活开始</h3>
+        <p>进入沈阳理工大学车辆工程专业，成为 2026 级本科生。</p>
+        <p>开始学习 C 语言和 Python，从基础程序练习入手。</p>
+        <p>加入计算机协会和智能车社团，认识一起学编程、做硬件的同学。</p>
+      </div>
       <div class="tl-item reveal"><span class="when">未来</span><h3>向新能源汽车 / 嵌入式方向发展</h3><p>下一站是 STM32、传感器与电机控制。希望在扎实的车辆工程基础上，用代码参与未来汽车的开发。</p></div></div>
   </div>
 </section>
@@ -1338,6 +1348,7 @@
     var cv = document.getElementById("stars");
     if (!cv || reduce) return;
     var ctx = cv.getContext("2d");
+    if (!ctx) return;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var w = 0, h = 0, pts = [];
 
@@ -1457,6 +1468,10 @@
   (function counters() {
     var nodes = document.querySelectorAll("[data-count]");
     if (!nodes.length) return;
+    if (!("IntersectionObserver" in window)) {
+      nodes.forEach(function (el) { el.textContent = el.getAttribute("data-count") + (el.getAttribute("data-suffix") || ""); });
+      return;
+    }
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         if (!en.isIntersecting) return;
@@ -1543,10 +1558,12 @@
       var max = document.documentElement.scrollHeight - window.innerHeight;
       if (bar) bar.style.width = (max > 0 ? (y / max) * 100 : 0) + "%";
       if (header) header.classList.toggle("scrolled", y > 24);
-      var idx = -1;
+      var idx = -1, nearestTop = -Infinity;
       for (var i = 0; i < sections.length; i++) {
         var s = sections[i];
-        if (s && s.getBoundingClientRect().top <= window.innerHeight * 0.36) idx = i;
+        if (!s) continue;
+        var top = s.getBoundingClientRect().top;
+        if (top <= window.innerHeight * 0.36 && top > nearestTop) { idx = i; nearestTop = top; }
       }
       links.forEach(function (a, i) { a.classList.toggle("active", i === idx); });
     }
@@ -1560,6 +1577,18 @@
     var btn = document.getElementById("burger");
     var nav = document.getElementById("navlinks");
     if (!btn || !nav) return;
+    function closeMenu() {
+      nav.classList.remove("open");
+      btn.classList.remove("open");
+      btn.setAttribute("aria-expanded", "false");
+    }
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && nav.classList.contains("open")) { closeMenu(); btn.focus(); }
+    });
+    document.addEventListener("click", function (e) {
+      if (!nav.contains(e.target) && !btn.contains(e.target)) closeMenu();
+    });
+    window.addEventListener("resize", function () { if (window.innerWidth > 720) closeMenu(); });
     btn.addEventListener("click", function () {
       var open = nav.classList.toggle("open");
       btn.classList.toggle("open", open);
