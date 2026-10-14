@@ -1042,9 +1042,100 @@
     nav.links { visibility: hidden; }
     nav.links.open { visibility: visible; }
   }
+  .favorite-group li { align-items: flex-start; }
+  .favorite-group li:has(> .favorite-name) { display: grid; grid-template-columns: 22px minmax(0,1fr); gap: 8px 12px; }
+  .favorite-group li > .favorite-review, .favorite-group li > .favorite-source { grid-column: 2; }
+  .favorite-review { font-size: 14px; color: var(--muted); line-height: 1.85; margin: 10px 0; }
+  .favorite-source, #site-notes a { color: var(--cyan); font-size: 13px; text-underline-offset: 4px; }
+  .favorite-group li > div { min-width: 0; }
+  .view-options, .copy-actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; margin: 12px 0 20px; }
+  .view-options span { color: var(--muted); font-size: 12px; }
+  .view-options button, .copy-actions button { font: inherit; font-size: 13px; min-height: 44px; padding: 10px 16px; border-radius: 12px; border: 1px solid var(--line); color: var(--text); background: #fff8ee; cursor: pointer; }
+  #copy-status { min-height: 1.8em; font-size: 13px; }
+  #copy-fallback { max-width: 100%; width: 280px; padding: 12px; font: inherit; }
+  #site-notes .card { line-height: 2; color: var(--muted); }
+  body.reading-mode #wallpaper, body.reading-mode #sideScenery, body.reading-mode #stars, body.reading-mode #spotlight { display: none; }
+  body.reading-mode::before, body.reading-mode::after, body.reading-mode #bgShade { display: none; }
+  body.reading-mode .color-section { background: #fff7eb; }
+  body.reading-mode .reveal { opacity: 1; transform: none !important; }
+  body.reading-mode * { animation: none !important; scroll-behavior: auto !important; }
+  body.reading-mode [data-tilt] { transform: none !important; }
+  @media (max-width:720px) { .view-options { flex-direction: column; } .favorite-group h4 { flex-wrap: wrap; } }
+  #launch[hidden] { display: none; }
+  body.launch-open { overflow: hidden; }
+  #launch { position: fixed; inset: 0; z-index: 500; background: #faf3e7; color: #44392d; overflow-y: auto; display: flex; flex-direction: column; padding: clamp(20px,4vw,52px); isolation: isolate; transition: opacity .45s ease,visibility .45s; }
+  #launch::before { content: ''; position: absolute; inset: 0; z-index: -2; background: linear-gradient(90deg,rgba(250,243,231,.98),rgba(250,243,231,.83) 48%,rgba(250,243,231,.25)),url('background.jpg?v=20261013-2011') center right / auto 100% no-repeat; }
+  .launch-grid { position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: .20; background-image: linear-gradient(#bd9a69 1px,transparent 1px),linear-gradient(90deg,#bd9a69 1px,transparent 1px); background-size: 70px 70px; mask-image: linear-gradient(135deg,#000,transparent 75%); }
+  .launch-top,.launch-bottom { display:flex; justify-content:space-between; gap:16px; font:11px monospace; letter-spacing:.12em; color:#856745; }
+  .launch-top { border-bottom:1px solid #d9c6a9; padding-bottom:16px; }
+  .launch-bottom { padding-top:22px; margin-top:auto; }
+  .launch-panel { width:min(100%,680px); margin:auto 0; padding:clamp(28px,5vh,64px) clamp(4px,4vw,64px); border-left:2px solid #c59a5f; }
+  .launch-code { font:11px monospace; letter-spacing:.18em; color:#947047; margin-bottom:32px; }
+  .launch-kicker { font-size:13px; letter-spacing:.15em; }
+  #launch-title { font-size:clamp(38px,5.5vw,72px); line-height:1.2; letter-spacing:-.04em; margin:18px 0 24px; }
+  #launch-title em { font-style:normal; color:#a46739; }
+  .launch-desc { color:#796a59; font-size:15px; line-height:2; }
+  .launch-spec { display:flex; flex-wrap:wrap; gap:10px 22px; margin:24px 0 30px; padding-top:16px; border-top:1px solid #d9c6a9; font-size:12px; }
+  #launch-enter { display:flex; width:100%; justify-content:space-between; align-items:center; gap:16px; min-height:60px; padding:16px 22px; border:1px solid #9b693d; border-radius:3px; background:#a57143; color:#fffaf1; font:600 16px inherit; cursor:pointer; box-shadow:5px 5px 0 #e5d6bd; transition:background .2s,transform .2s; }
+  #launch-enter:hover { background:#8f5d34; transform:translateY(-2px); }
+  #launch-enter:focus-visible { outline:3px solid #70502e; outline-offset:6px; }
+  #launch-enter span:last-child { font:12px monospace; letter-spacing:.12em; }
+  #launch-status { font:12px monospace; color:#856745; margin:18px 0 10px; }
+  .launch-track { height:2px; background:#e4d6be; overflow:hidden; }
+  .launch-track i { display:block; width:0; height:100%; background:#9b693d; transition:width .45s ease; }
+  #launch.entering .launch-track i { width:100%; }
+  #launch.leaving { opacity:0; visibility:hidden; pointer-events:none; }
+  @media(max-width:720px) { #launch { padding:22px; } #launch::before { background-position:center; background-size:auto 100%; opacity:.65; } .launch-panel { padding:34px 0 34px 18px; } .launch-top,.launch-bottom { font-size:9px; flex-wrap:wrap; } .launch-desc { font-size:14px; } .launch-code { margin-bottom:22px; } }
+  /* 启动页把阅读焦点交给标题，标题本身不是交互控件。 */
+  #hero h1[tabindex="-1"]:focus { outline: none; }
+  #launch-enter { font-family: inherit; font-size: 16px; font-weight: 600; }
+  body.reading-mode #launch { transition: none; }
+  #entry-loading[hidden] { display:none; }
+  #entry-loading { position:absolute; inset:0; min-height:100%; z-index:3; background:rgba(250,243,231,.97); display:flex; flex-direction:column; padding:clamp(22px,4vw,52px); overflow:auto; }
+  #launch.loading-active > :not(#entry-loading) { visibility:hidden; }
+  .loading-head { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; color:#856745; font:11px monospace; letter-spacing:.12em; }
+  .loading-center { width:min(100%,480px); margin:auto; padding:40px 0; text-align:center; }
+  .loading-orbit { width:96px; height:96px; margin:0 auto 30px; position:relative; display:grid; place-items:center; border:1px solid #dec9aa; border-radius:50%; }
+  .loading-orbit i { position:absolute; inset:-8px; border:2px solid transparent; border-top-color:#a57143; border-bottom-color:#d9b47e; border-radius:50%; animation:loadOrbit 2s linear infinite; }
+  .loading-orbit b { font:24px monospace; color:#a57143; }
+  #loading-title { font-size:clamp(28px,5vw,40px); margin:12px 0 36px; }
+  .loading-meter { display:flex; justify-content:space-between; font-size:12px; color:#856745; }
+  .loading-meter strong { font:18px monospace; }
+  .loading-bar { height:4px; background:#e7d9c4; margin-top:12px; }
+  #loading-fill { display:block; height:100%; width:0; background:#a57143; transition:width .1s linear; }
+  #loading-message { min-height:2em; font-size:13px; color:#796a59; margin-top:20px; }
+  #loading-skip { min-height:44px; padding:10px 20px; background:transparent; color:#856745; border:1px solid #d9c6a9; border-radius:4px; cursor:pointer; font:inherit; font-size:13px; }
+  .loading-foot { text-align:center; font:10px monospace; letter-spacing:.18em; color:#947047; }
+  @keyframes loadOrbit { to { transform:rotate(360deg); } }
+  @media(max-height:540px) { .loading-center { padding:20px 0; } .loading-orbit { width:48px;height:48px;margin-bottom:16px; } #loading-title { margin:10px 0 18px; } }
 </style>
+<noscript><style>.reveal { opacity:1; transform:none; } @media(max-width:720px){header.nav,header.nav.scrolled{position:relative;top:auto;left:auto;right:auto;margin:12px;flex-wrap:wrap;}nav.links{position:static;visibility:visible;opacity:1;transform:none;pointer-events:auto;flex-direction:row;flex-wrap:wrap;max-height:none;box-shadow:none;} .burger,.view-options,.copy-actions{display:none;}}</style></noscript>
 </head>
 <body>
+<div id="launch" hidden role="dialog" aria-modal="true" aria-labelledby="launch-title">
+  <div class="launch-grid" aria-hidden="true"></div>
+  <div id="entry-loading" hidden aria-labelledby="loading-title">
+    <div class="loading-head"><span>TYUN / INITIALIZING</span><span>PERSONAL ARCHIVE</span></div>
+    <div class="loading-center"><div class="loading-orbit" aria-hidden="true"><i></i><b>TY</b></div>
+    <p class="launch-kicker">正在进入个人主页</p><h2 id="loading-title">档案展开中<span class="loading-dots">…</span></h2>
+    <div class="loading-meter"><span>界面准备</span><strong id="loading-number" aria-hidden="true">0%</strong></div>
+    <div class="loading-bar" role="progressbar" aria-label="启动过渡进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="loading-fill"></i></div>
+    <p id="loading-message" role="status">打开个人档案</p><button type="button" id="loading-skip">跳过过渡 →</button></div>
+    <p class="loading-foot">WELCOME TO TYUN'S SPACE</p>
+  </div>
+  <div class="launch-top"><span>TYUN / PERSONAL ARCHIVE</span><span>SYS. 2026 — 01</span></div>
+  <div class="launch-panel">
+    <div class="launch-code" aria-hidden="true">◈ &nbsp; CONNECTION READY</div>
+    <p class="launch-kicker">个人档案 / 李天宇</p>
+    <h2 id="launch-title">从这里，<br><em>开始了解我。</em></h2>
+    <p class="launch-desc">车辆工程 · 编程学习 · 大学日常<br>还有课余喜欢的游戏、音乐和故事。</p>
+    <div class="launch-spec"><span>沈阳理工大学</span><span>2026 级本科生</span><span>TYUN</span></div>
+    <button id="launch-enter" type="button"><span>进入主页</span><span aria-hidden="true">START →</span></button>
+    <p id="launch-status" role="status">准备就绪，点击进入</p>
+    <div class="launch-track" aria-hidden="true"><i></i></div>
+  </div>
+  <div class="launch-bottom"><span>车辆 / 代码 / 生活</span><span>EST. 2026 &nbsp; · &nbsp; WELCOME</span></div>
+</div>
 <div id="wallpaper" aria-hidden="true"></div>
 <div id="bgShade" aria-hidden="true"></div>
 <div id="sideScenery" aria-hidden="true">
@@ -1086,6 +1177,7 @@
       在沈阳理工大学读车辆工程，2026 级。最近在学 C 语言，也用 Python 写了一个猜数字小游戏。
       接下来想试试 STM32，看看代码是怎么让电机转起来的。这里放一些练习，也记下大学里慢慢学会的东西。
     </p>
+    <div class="view-options"><button type="button" id="readingToggle" aria-pressed="false">清晰阅读</button><span>壁纸与简洁背景，随时切换</span></div>
     <div class="cta">
       <a class="btn primary" href="#about">关于我 →</a>
       <a class="btn ghost" href="#campus">看看大学日常 →</a>
@@ -1270,13 +1362,13 @@
       <article class="card hobby reveal" data-tilt>
         <span class="hobby-label">02 / 音乐</span>
         <h3>歌单里常有的</h3>
-        <p>会听一些术力口，也听游戏配乐。这里先记下偏好，以后再慢慢补上想分享的曲子。</p>
+        <p>会听一些术力口，也听游戏配乐。下面放了两首收藏，感兴趣可以点开听听。</p>
         <div class="chips"><span class="chip">术力口 / VOCALOID</span><span class="chip">游戏配乐 / OST</span></div>
       </article>
       <article class="card hobby reveal" data-tilt>
         <span class="hobby-label">03 / 故事</span>
         <h3>动画、小说和漫画</h3>
-        <p>课余也会看一些动画、小说和漫画。具体作品先不列长单，之后有想聊的，再在这里写几句。</p>
+        <p>课余也会看一些动画、小说和漫画。下面先放两部收藏，有新的喜欢再慢慢添。</p>
         <div class="chips"><span class="chip">动画</span><span class="chip">小说</span><span class="chip">漫画</span></div>
       </article>
     </div>
@@ -1284,10 +1376,10 @@
       <div class="favorites-heading reveal"><span class="aside-label">FAVORITES</span><h3 id="favorites-title">我的收藏</h3><p>喜欢的作品和歌，放在这里。</p></div>
       <div class="favorites-grid">
         <div class="favorite-group reveal"><h4>动漫 <span>ANIME / 02</span></h4>
-          <ul><li><span class="favorite-order" aria-hidden="true">01</span><span class="favorite-name">《记忆管理局》</span></li><li><span class="favorite-order" aria-hidden="true">02</span><span class="favorite-name">《金牌得主》</span></li></ul>
+          <ul><li><span class="favorite-order" aria-hidden="true">01</span><span class="favorite-name">《记忆管理局》</span><p class="favorite-review">想回到过去，却一脚踏进了记忆里的奇怪世界。光是这个设定就够勾人：如果你也喜欢带点怪诞感的原创动画，可以先从 PV 看起。</p><a class="favorite-source" href="https://www.bilibili.com/bangumi/play/ep1214923" target="_blank" rel="noopener noreferrer">看看官方 PV ↗</a></li><li><span class="favorite-order" aria-hidden="true">02</span><span class="favorite-name">《金牌得主》</span><p class="favorite-review">不懂花滑也能入场。一个想站上冰面的女孩，遇见愿意认真带她走下去的教练——比起奖牌，更让人想看的是，他们怎么一步一步滑到那里。</p><a class="favorite-source" href="https://zh.wikipedia.org/wiki/金牌得主" target="_blank" rel="noopener noreferrer">作品介绍 ↗</a></li></ul>
         </div>
         <div class="favorite-group reveal"><h4>音乐 <span>MUSIC / 02</span></h4>
-          <ul><li><span class="favorite-order" aria-hidden="true">01</span><div><span class="favorite-name">2240</span><span class="favorite-artist">二宫爱</span></div></li><li><span class="favorite-order" aria-hidden="true">02</span><div><span class="favorite-name">Without You</span><span class="favorite-artist">Appleby</span></div></li></ul>
+          <ul><li><span class="favorite-order" aria-hidden="true">01</span><div><span class="favorite-name">2240</span><p class="favorite-review">给歌单留一点安静的空间。这首先放在这里，不急着用几句话定义它，找个不赶时间的时候听听。</p><a class="favorite-source" href="https://www.uta-net.com/movie/359512/" target="_blank" rel="noopener noreferrer">查看歌曲与视频 ↗</a><span class="favorite-artist">二宫爱</span></div></li><li><span class="favorite-order" aria-hidden="true">02</span><div><span class="favorite-name">Without You</span><p class="favorite-review">收藏里的另一首。先不讲一长串推荐理由，点开听听，也许刚好合你的耳朵。</p><a class="favorite-source" href="https://music.apple.com/us/song/1815931000" target="_blank" rel="noopener noreferrer">前往 Apple Music ↗</a><span class="favorite-artist">Appleby</span></div></li></ul>
         </div>
       </div>
     </div>
@@ -1309,6 +1401,10 @@
   </div>
 </section>
 
+  <section id="site-notes" class="color-section" style="--section-bg:rgba(250,239,220,.48)"><div class="section-inner">
+    <p class="eyebrow reveal">About This Site</p><h2 class="title reveal">这个主页，也在<em>慢慢改</em></h2>
+    <div class="card reveal"><p>这里从一个深色科技风页面开始，后来换成了更喜欢的暖色壁纸，也补上了校园日常和收藏。</p><p>页面是在 AI 辅助下逐步修改的，使用 HTML、CSS 和 JavaScript，托管在 GitHub Pages。手机适配、导航和动画里遇到的问题，也都是这次练习的一部分。</p><p>之后想把内容慢慢补实：有新的学习进展、喜欢的作品，就再回来添几笔。</p><a href="https://github.com/xingliaoyuan/xingliaoyuan.github.io" target="_blank" rel="noopener noreferrer">看看本站源码 ↗</a></div>
+  </div></section>
   <!-- ========== 联系 ========== -->
   <section id="contact" class="color-section">
 <div class="section-inner"><div class="section-heading"><div class="heading-main"><span class="section-index reveal" aria-hidden="true">08</span><p class="eyebrow reveal">Contact</p><h2 class="title reveal">可以在这里<em>找到我</em></h2></div><div class="heading-aside reveal"><span class="aside-label">有空聊聊</span><p>从同一门课，到同一款游戏，都可以是话题。</p></div></div>
@@ -1328,6 +1424,7 @@
         <span><span class="k">GitHub 主页 ↗</span><span class="v">@xingliaoyuan</span></span>
       </a>
     </div>
+    <div class="copy-actions"><button type="button" data-copy="L15940475106">复制微信号</button><button type="button" data-copy="l15940475106@163.com">复制邮箱</button></div><p id="copy-status" role="status" aria-live="polite"></p><input id="copy-fallback" aria-label="请手动复制联系方式" readonly hidden />
     <p class="note reveal">同校同学，或者刚好有共同爱好的朋友，都欢迎来聊聊。</p>
   </div>
 </section>
@@ -1650,6 +1747,48 @@
   /* ---------- 11. 年份 ---------- */
   var y = document.getElementById("year");
   if (y) y.textContent = new Date().getFullYear();
+})();
+</script>
+<script>
+(function(){
+  var toggle=document.getElementById('readingToggle');
+  function apply(on){document.body.classList.toggle('reading-mode',on);toggle.setAttribute('aria-pressed',String(on));toggle.textContent=on?'恢复壁纸':'清晰阅读';}
+  try{apply(localStorage.getItem('tyun-reading')==='1');}catch(e){apply(false);}
+  toggle.addEventListener('click',function(){var on=!document.body.classList.contains('reading-mode');apply(on);try{localStorage.setItem('tyun-reading',on?'1':'0');}catch(e){}});
+  var copyRequest=0;
+  document.querySelectorAll('[data-copy]').forEach(function(btn){btn.addEventListener('click',async function(){
+    var text=btn.getAttribute('data-copy'),status=document.getElementById('copy-status'),fallback=document.getElementById('copy-fallback');
+    var request=++copyRequest;
+    fallback.hidden=true;
+    try{if(!navigator.clipboard)throw Error('unavailable');await navigator.clipboard.writeText(text);if(request!==copyRequest)return;status.textContent='已复制：'+text;}
+    catch(e){if(request!==copyRequest)return;fallback.value=text;fallback.hidden=false;fallback.focus();fallback.select();status.textContent='未能自动复制，请长按或选中下方文字复制。';}
+  });});
+})();
+</script>
+<script>
+(function(){
+  var gate=document.getElementById('launch'),button=document.getElementById('launch-enter');
+  // 深链接直接显示目标栏目；无 JS 时入口保持隐藏，不挡住正文。
+  if(location.hash) return;
+  var siblings=Array.prototype.filter.call(document.body.children,function(el){return el!==gate && el.tagName!=='SCRIPT';});
+  var saved=siblings.map(function(el){return {el:el,inert:el.inert,aria:el.getAttribute('aria-hidden')};});
+  gate.hidden=false;document.body.classList.add('launch-open');
+  saved.forEach(function(x){x.el.inert=true;x.el.setAttribute('aria-hidden','true');});
+  button.focus({preventScroll:true});
+  var started=false,finished=false,interval=null,deadline=null;
+  function finish(){if(finished)return;finished=true;clearInterval(interval);clearTimeout(deadline);gate.hidden=true;document.body.classList.remove('launch-open');saved.forEach(function(x){x.el.inert=x.inert;if(x.aria===null)x.el.removeAttribute('aria-hidden');else x.el.setAttribute('aria-hidden',x.aria);});window.scrollTo({top:0,left:0,behavior:'instant'});var hero=document.querySelector('#hero h1');hero.setAttribute('tabindex','-1');hero.focus({preventScroll:true});}
+  var loader=document.getElementById('entry-loading'),skip=document.getElementById('loading-skip');
+  function enter(){
+    if(started)return;started=true;
+    var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches || document.body.classList.contains('reading-mode');
+    if(reduce){finish();return;}
+    loader.hidden=false;gate.classList.add('loading-active');button.disabled=true;skip.focus({preventScroll:true});
+    var begin=performance.now(),duration=1600;
+    interval=setInterval(function(){var p=Math.min(100,Math.floor((performance.now()-begin)/duration*100));document.getElementById('loading-number').textContent=p+'%';document.getElementById('loading-fill').style.width=p+'%';loader.querySelector('[role="progressbar"]').setAttribute('aria-valuenow',p);document.getElementById('loading-message').textContent=p<35?'打开个人档案':p<75?'展开学习与生活记录':'准备就绪，欢迎来访';},80);
+    deadline=setTimeout(finish,1800);
+  }
+  button.addEventListener('click',enter);skip.addEventListener('click',finish);
+  gate.addEventListener('keydown',function(e){if(e.key==='Escape'){if(started)finish();else enter();}if(e.key==='Tab'){e.preventDefault();(started?skip:button).focus();}});
 })();
 </script>
 </body>
