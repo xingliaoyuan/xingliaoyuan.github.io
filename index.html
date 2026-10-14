@@ -1136,6 +1136,24 @@
   body.reading-mode #warm-touch-effects { display:none; }
   @media(prefers-reduced-motion:reduce) { #warm-touch-effects { display:none; } #sideScenery .leaf { animation:none; opacity:0; } }
 
+  #avatarBox { padding:0; cursor:pointer; }
+  #avatarBox:focus-visible { outline:2px solid #a57143; outline-offset:6px; }
+  .avatar-hint { font-size:11px; color:var(--muted); margin:0; }
+  #leaf-quote:empty { display:none; }
+  #leaf-quote { padding:16px; background:#f9edd9; border-left:2px solid #ba8a4f; border-radius:4px 12px 12px 4px; font-size:14px; line-height:1.9; }
+  .hobby-expand { margin-top:24px; }
+  .hobby-expand details { border-top:1px solid var(--line); padding:12px 0; }
+  summary { cursor:pointer; min-height:44px; padding:10px 0; color:var(--cyan); }
+  summary:focus-visible { outline:2px solid var(--cyan); outline-offset:3px; }
+  .hobby-expand details p { padding:6px 0 12px; }
+  .debug-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px; }
+  .debug-grid h3 { font-size:19px; line-height:1.6; }
+  .debug-grid p { font-size:14px; color:var(--muted); line-height:1.9; }
+  .quote-gold-leaf { position:fixed; z-index:601; width:14px; height:28px; pointer-events:none; border-radius:90% 0 90% 0; background:linear-gradient(135deg,#edc879,#b38540); animation:quoteLeaf 1.9s ease-out forwards; }
+  @keyframes quoteLeaf { 0% { opacity:0;transform:translate(0,0) rotate(-25deg); } 15% { opacity:.8; } 100% { opacity:0;transform:translate(34px,100px) rotate(100deg); } }
+  body.reading-mode .quote-gold-leaf { display:none; }
+  @media(prefers-reduced-motion:reduce) { .quote-gold-leaf { display:none; } }
+  @media(max-width:900px) { .debug-grid { grid-template-columns:1fr; } }
 </style>
 <noscript><style>.reveal { opacity:1; transform:none; } @media(max-width:720px){header.nav,header.nav.scrolled{position:relative;top:auto;left:auto;right:auto;margin:12px;flex-wrap:wrap;}nav.links{position:static;visibility:visible;opacity:1;transform:none;pointer-events:auto;flex-direction:row;flex-wrap:wrap;max-height:none;box-shadow:none;} .burger,.view-options,.copy-actions{display:none;}}</style></noscript>
 </head>
@@ -1242,15 +1260,16 @@
 
       <div class="card idcard reveal" data-tilt>
         <div class="avatar-row">
-          <div id="avatarBox">
+          <button id="avatarBox" type="button" aria-label="点一下头像，读一句鼓励的话" title="点一下，收一片金叶">
             <img id="avatar" src="avatar.jpg" alt="李天宇的头像" width="136" height="136" decoding="async" />
             <canvas id="avatarFallback" width="136" height="136" aria-hidden="true"></canvas>
-          </div>
+          </button>
           <div class="who">
             <b>李天宇 / TYUN</b>
             <span>车辆工程 · 智能汽车方向学习者</span>
           </div>
         </div>
+        <p class="avatar-hint">轻触头像，收一句鼓励。</p><div id="leaf-quote" role="status" aria-live="polite" aria-atomic="true"></div>
         <dl class="meta">
           <div><dt>学校</dt><dd>沈阳理工大学</dd></div>
           <div><dt>专业</dt><dd>车辆工程</dd></div>
@@ -1429,6 +1448,7 @@
   </div>
 </section>
 
+  <section id="debug-notes" class="color-section" style="--section-bg:rgba(247,231,211,.48)"><div class="section-inner"><p class="eyebrow reveal">Trial &amp; Error</p><h2 class="title reveal">踩过的坑，<em>记下来</em></h2><p class="section-intro reveal">都是改这个主页时遇到的小问题，留给下次的自己。</p><div class="debug-grid"><article class="card reveal"><span class="aside-label">记录 / 01</span><h3>HTML 传进了另一个仓库</h3><p>更新主页时，把 index.html 传进了猜数字游戏的 first 仓库。</p><details><summary>后来怎么处理</summary><p>先核对仓库名：主页文件应上传到 xingliaoyuan.github.io，游戏仓库保留游戏文件。</p></details></article><article class="card reveal"><span class="aside-label">记录 / 02</span><h3>本地改好了，线上还没变</h3><p>电脑里能看到新内容，打开网站却还是旧页面。</p><details><summary>后来怎么处理</summary><p>本地保存不等于发布。上传新版后，查看 Actions 的部署结果，再刷新网页。</p></details></article><article class="card reveal"><span class="aside-label">记录 / 03</span><h3>进入主页，大标题多了个黑框</h3><p>加入启动页后，点击进入，名字周围出现了黑色边框。</p><details><summary>后来怎么处理</summary><p>原因是程序把焦点移到了标题，浏览器显示默认焦点框。只处理标题样式，保留按钮和链接的键盘焦点提示。</p></details></article></div></div></section>
   <section id="site-notes" class="color-section" style="--section-bg:rgba(250,239,220,.48)"><div class="section-inner">
     <p class="eyebrow reveal">About This Site</p><h2 class="title reveal">这个主页，也在<em>慢慢改</em></h2>
     <div class="card reveal"><p>这里从一个深色科技风页面开始，后来换成了更喜欢的暖色壁纸，也补上了校园日常和收藏。</p><p>页面是在 AI 辅助下逐步修改的，使用 HTML、CSS 和 JavaScript，托管在 GitHub Pages。手机适配、导航和动画里遇到的问题，也都是这次练习的一部分。</p><p>之后想把内容慢慢补实：有新的学习进展、喜欢的作品，就再回来添几笔。</p><a href="https://github.com/xingliaoyuan/xingliaoyuan.github.io" target="_blank" rel="noopener noreferrer">看看本站源码 ↗</a></div>
@@ -1835,6 +1855,11 @@
     layer.appendChild(burst);setTimeout(function(){burst.remove();},1100);
   },{passive:true});
   document.addEventListener('visibilitychange',function(){if(document.hidden){press=null;layer.replaceChildren();}});
+})();</script>
+<script>(function avatarQuotes(){
+var quotes=['走得慢没有关系，认真走过的每一步，都在缩短与目标的距离。','努力的意义，是让今天还不会的事，成为明天可以做到的事。','暂时看不到结果，也不代表没有生长；把根扎稳，再等枝叶舒展。','不必等到准备完美才出发，答案常常藏在动手尝试的过程里。','允许自己休息，也记得再次出发；长远的路，靠一次次继续走完。'];
+var next=0,leaf=null,timer=null,button=document.getElementById('avatarBox'),box=document.getElementById('leaf-quote');
+button.addEventListener('click',function(){box.textContent=quotes[next];next=(next+1)%quotes.length;if(leaf)leaf.remove();clearTimeout(timer);if(matchMedia('(prefers-reduced-motion: reduce)').matches||document.body.classList.contains('reading-mode'))return;var r=button.getBoundingClientRect();leaf=document.createElement('i');leaf.className='quote-gold-leaf';leaf.setAttribute('aria-hidden','true');leaf.style.left=(r.left+r.width/2)+'px';leaf.style.top=(r.top+r.height/2)+'px';document.body.appendChild(leaf);timer=setTimeout(function(){if(leaf)leaf.remove();leaf=null;},2000);});
 })();</script>
 </body>
 </html>
