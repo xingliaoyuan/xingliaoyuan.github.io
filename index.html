@@ -1108,6 +1108,34 @@
   .loading-foot { text-align:center; font:10px monospace; letter-spacing:.18em; color:#947047; }
   @keyframes loadOrbit { to { transform:rotate(360deg); } }
   @media(max-height:540px) { .loading-center { padding:20px 0; } .loading-orbit { width:48px;height:48px;margin-bottom:16px; } #loading-title { margin:10px 0 18px; } }
+
+  @media (min-width:1100px) {
+    #sideScenery .leaf { top:-60px; animation:goldLeafFall 29s linear infinite; opacity:0; }
+    #sideScenery .leaf-two { animation-duration:35s; animation-delay:-18s; }
+    #sideScenery .leaf-three { animation-duration:32s; animation-delay:-8s; }
+    #sideScenery .leaf-four { animation-duration:39s; animation-delay:-27s; }
+    #sideScenery .scenery-right .leaf-one { animation-delay:-14s; }
+    #sideScenery .scenery-right .leaf-two { animation-delay:-5s; }
+    #sideScenery .scenery-right .leaf-three { animation-delay:-23s; }
+    #sideScenery .scenery-right .leaf-four { animation-delay:-32s; }
+  }
+  @keyframes goldLeafFall {
+    0% { opacity:0; transform:translate3d(0,0,0) rotate(var(--leaf-turn)); }
+    8% { opacity:.6; }
+    35% { transform:translate3d(22px,38vh,0) rotate(calc(var(--leaf-turn) + 48deg)); }
+    65% { transform:translate3d(-12px,72vh,0) rotate(calc(var(--leaf-turn) + 110deg)); }
+    90% { opacity:.45; }
+    100% { opacity:0; transform:translate3d(14px,calc(100vh + 100px),0) rotate(calc(var(--leaf-turn) + 160deg)); }
+  }
+  #warm-touch-effects { position:fixed; inset:0; z-index:600; overflow:hidden; pointer-events:none; }
+  .warm-touch { position:absolute; width:0; height:0; pointer-events:none; }
+  .warm-touch::before { content:''; position:absolute; width:54px; height:54px; left:-27px; top:-27px; border:1px solid rgba(192,139,64,.55); border-radius:50%; background:radial-gradient(circle,rgba(255,218,151,.25),transparent 70%); animation:warmRipple 1000ms ease-out forwards; }
+  .warm-touch i { position:absolute; width:4px; height:4px; margin:-2px; background:#d7a55e; border-radius:50%; box-shadow:0 0 7px rgba(235,184,100,.35); animation:warmSpark 900ms ease-out forwards; }
+  @keyframes warmRipple { from { opacity:.7; transform:scale(.2); } to { opacity:0; transform:scale(1.7); } }
+  @keyframes warmSpark { from { opacity:.7; transform:translate(0,0) scale(.6); } to { opacity:0; transform:translate(var(--dx),var(--dy)) scale(.2); } }
+  body.reading-mode #warm-touch-effects { display:none; }
+  @media(prefers-reduced-motion:reduce) { #warm-touch-effects { display:none; } #sideScenery .leaf { animation:none; opacity:0; } }
+
 </style>
 <noscript><style>.reveal { opacity:1; transform:none; } @media(max-width:720px){header.nav,header.nav.scrolled{position:relative;top:auto;left:auto;right:auto;margin:12px;flex-wrap:wrap;}nav.links{position:static;visibility:visible;opacity:1;transform:none;pointer-events:auto;flex-direction:row;flex-wrap:wrap;max-height:none;box-shadow:none;} .burger,.view-options,.copy-actions{display:none;}}</style></noscript>
 </head>
@@ -1791,5 +1819,22 @@
   gate.addEventListener('keydown',function(e){if(e.key==='Escape'){if(started)finish();else enter();}if(e.key==='Tab'){e.preventDefault();(started?skip:button).focus();}});
 })();
 </script>
+<script>
+(function gentleTouch(){
+  var layer=document.createElement('div');layer.id='warm-touch-effects';layer.setAttribute('aria-hidden','true');document.body.appendChild(layer);
+  var reduced=matchMedia('(prefers-reduced-motion: reduce)'),press=null,last=-Infinity;
+  function allowed(){return !reduced.matches&&!document.body.classList.contains('reading-mode')&&!document.hidden;}
+  document.addEventListener('pointerdown',function(e){if(e.isPrimary&&e.button===0)press={id:e.pointerId,x:e.clientX,y:e.clientY,time:performance.now()};},{passive:true});
+  document.addEventListener('pointercancel',function(){press=null;},{passive:true});
+  document.addEventListener('pointerup',function(e){
+    var p=press;press=null;if(!p||p.id!==e.pointerId||!allowed())return;
+    var now=performance.now();if(now-p.time>600||Math.hypot(e.clientX-p.x,e.clientY-p.y)>12||now-last<100)return;
+    last=now;while(layer.children.length>=6)layer.firstChild.remove();
+    var burst=document.createElement('span');burst.className='warm-touch';burst.style.left=e.clientX+'px';burst.style.top=e.clientY+'px';
+    for(var i=0;i<5;i++){var dot=document.createElement('i'),angle=i*Math.PI*2/5;dot.style.setProperty('--dx',(Math.cos(angle)*32)+'px');dot.style.setProperty('--dy',(Math.sin(angle)*26-10)+'px');burst.appendChild(dot);}
+    layer.appendChild(burst);setTimeout(function(){burst.remove();},1100);
+  },{passive:true});
+  document.addEventListener('visibilitychange',function(){if(document.hidden){press=null;layer.replaceChildren();}});
+})();</script>
 </body>
 </html>
