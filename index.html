@@ -1154,6 +1154,23 @@
   body.reading-mode .quote-gold-leaf { display:none; }
   @media(prefers-reduced-motion:reduce) { .quote-gold-leaf { display:none; } }
   @media(max-width:900px) { .debug-grid { grid-template-columns:1fr; } }
+ .vehicle-steps { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+ .vehicle-steps button { display:flex; flex-direction:column; align-items:flex-start; gap:8px; padding:22px; min-height:140px; font:inherit; color:var(--text); background:#fff8ef; border:1px solid #dec9ac; border-radius:16px; cursor:pointer; text-align:left; }
+ .vehicle-steps button[aria-expanded="true"] { background:#f2dfbf; border-color:#a57143; }
+ .vehicle-number { font:12px monospace; color:var(--cyan); }
+ .vehicle-steps strong { font-size:20px; }
+ .vehicle-steps button > span:last-child,.vehicle-flow { font-size:12px; color:var(--muted); }
+ .vehicle-panel { border-top:1px solid var(--line); padding-top:20px; margin-top:20px; }
+ .vehicle-panel[hidden] { display:none; }
+ .vehicle-panel p,.vehicle-example p { color:var(--muted); font-size:14px; line-height:1.9; }
+ .vehicle-panel h3 { margin:16px 0 8px; font-size:24px; }
+ .vehicle-panel h4 { margin-bottom:8px; }
+ .vehicle-example { background:#fbf0dd; border-left:3px solid #c59a5f; padding:20px; margin-top:24px; border-radius:4px 14px 14px 4px; }
+ @media(max-width:720px){ .vehicle-steps { gap:8px; } .vehicle-steps button { min-height:116px; padding:12px 8px; } .vehicle-steps strong { font-size:16px; } .vehicle-example { padding:16px; } }
+  /* 更清晰的暖金点击反馈 */
+  .warm-touch::before { width:88px; height:88px; left:-44px; top:-44px; border:2px solid rgba(176,117,42,.8); background:radial-gradient(circle,rgba(255,215,139,.38),rgba(245,196,112,.12) 50%,transparent 72%); box-shadow:0 0 16px rgba(224,170,82,.22); animation-duration:1100ms; }
+  .warm-touch::after { content:''; position:absolute; width:46px; height:46px; left:-23px; top:-23px; border:1px solid rgba(202,151,68,.75); border-radius:50%; animation:warmRipple 950ms ease-out forwards; pointer-events:none; }
+  .warm-touch i { width:6px; height:6px; margin:-3px; background:#c28b3e; box-shadow:0 0 9px rgba(238,184,89,.65); animation-duration:1050ms; }
 </style>
 <noscript><style>.reveal { opacity:1; transform:none; } @media(max-width:720px){header.nav,header.nav.scrolled{position:relative;top:auto;left:auto;right:auto;margin:12px;flex-wrap:wrap;}nav.links{position:static;visibility:visible;opacity:1;transform:none;pointer-events:auto;flex-direction:row;flex-wrap:wrap;max-height:none;box-shadow:none;} .burger,.view-options,.copy-actions{display:none;}}</style></noscript>
 </head>
@@ -1434,6 +1451,15 @@
   </div>
 </section>
 
+<section id="vehicle-path" class="color-section" style="--section-bg:rgba(249,234,210,.48)"><div class="section-inner">
+<p class="eyebrow reveal">Learning Map / 车辆与代码</p><h2 class="title reveal">一辆小车，<em>怎样听懂代码？</em></h2>
+<p class="section-intro reveal">这是我准备探索的学习路线，还不是已完成的智能车项目。点击下面三个环节，看看它们怎么配合。</p>
+<div class="card vehicle-map">
+<div class="vehicle-steps" aria-label="智能车学习路线"><button type="button" data-vehicle="sensor" aria-controls="vehicle-sensor" aria-expanded="true"><span class="vehicle-number">01</span><strong>传感器</strong><span>感知环境</span></button><button type="button" data-vehicle="controller" aria-controls="vehicle-controller" aria-expanded="true"><span class="vehicle-number">02</span><strong>STM32</strong><span>处理与控制</span></button><button type="button" data-vehicle="motor" aria-controls="vehicle-motor" aria-expanded="true"><span class="vehicle-number">03</span><strong>电机</strong><span>执行动作</span></button></div>
+<p class="vehicle-flow">简化流程：感知环境 → 程序判断 → 驱动电机</p>
+<div class="vehicle-panel" id="vehicle-sensor"><p class="chip">计划学习 · 传感器</p><h3>感知环境</h3><p>像车的感官，把距离、光线等变化变成可以读取的数据。</p><h4>我的下一步</h4><p>计划先了解传感器的输入输出，再学习如何读取并观察数据。</p></div><div class="vehicle-panel" id="vehicle-controller"><p class="chip">计划学习 · STM32</p><h3>处理与控制</h3><p>读取传感器数据，按程序里的规则判断，再向执行部件发送控制信号。</p><h4>我的下一步</h4><p>先练好 C 语言，再从点亮 LED、GPIO 和定时器开始接触单片机。</p></div><div class="vehicle-panel" id="vehicle-motor"><p class="chip">计划学习 · 电机</p><h3>执行动作</h3><p>通过驱动电路把控制指令变成转动，让小车能够前进或转向。</p><h4>我的下一步</h4><p>之后学习电机驱动与 PWM，先理解调速原理，再尝试实物控制。</p></div>
+<div class="vehicle-example"><strong>举个例子：前方出现障碍物</strong><p>距离传感器提供测量值 → STM32 按预设条件判断是否需要停车 → 驱动电路控制电机停止。这只是帮助理解信息流的简化示例，实物还需要考虑接线、供电、测量误差和程序调试。</p></div>
+</div></div></section>
   <!-- ========== 下一步 ========== -->
   <section id="next" class="color-section">
 <div class="section-inner"><div class="section-heading"><div class="heading-main"><span class="section-index reveal" aria-hidden="true">07</span><p class="eyebrow reveal">Next Up</p><h2 class="title reveal">接下来<em>想做的事</em></h2></div><div class="heading-aside reveal"><span class="aside-label">下一页，待续</span><p>不用一次做完，先从其中一件开始。</p></div></div>
@@ -1845,14 +1871,15 @@
   var reduced=matchMedia('(prefers-reduced-motion: reduce)'),press=null,last=-Infinity;
   function allowed(){return !reduced.matches&&!document.body.classList.contains('reading-mode')&&!document.hidden;}
   document.addEventListener('pointerdown',function(e){if(e.isPrimary&&e.button===0)press={id:e.pointerId,x:e.clientX,y:e.clientY,time:performance.now()};},{passive:true});
+  document.addEventListener('pointermove',function(e){if(press&&press.id===e.pointerId&&Math.hypot(e.clientX-press.x,e.clientY-press.y)>12)press=null;},{passive:true});
   document.addEventListener('pointercancel',function(){press=null;},{passive:true});
   document.addEventListener('pointerup',function(e){
     var p=press;press=null;if(!p||p.id!==e.pointerId||!allowed())return;
     var now=performance.now();if(now-p.time>600||Math.hypot(e.clientX-p.x,e.clientY-p.y)>12||now-last<100)return;
     last=now;while(layer.children.length>=6)layer.firstChild.remove();
     var burst=document.createElement('span');burst.className='warm-touch';burst.style.left=e.clientX+'px';burst.style.top=e.clientY+'px';
-    for(var i=0;i<5;i++){var dot=document.createElement('i'),angle=i*Math.PI*2/5;dot.style.setProperty('--dx',(Math.cos(angle)*32)+'px');dot.style.setProperty('--dy',(Math.sin(angle)*26-10)+'px');burst.appendChild(dot);}
-    layer.appendChild(burst);setTimeout(function(){burst.remove();},1100);
+    for(var i=0;i<5;i++){var dot=document.createElement('i'),angle=i*Math.PI*2/5;dot.style.setProperty('--dx',(Math.cos(angle)*54)+'px');dot.style.setProperty('--dy',(Math.sin(angle)*46-12)+'px');burst.appendChild(dot);}
+    layer.appendChild(burst);setTimeout(function(){burst.remove();},1250);
   },{passive:true});
   document.addEventListener('visibilitychange',function(){if(document.hidden){press=null;layer.replaceChildren();}});
 })();</script>
@@ -1861,5 +1888,11 @@ var quotes=['走得慢没有关系，认真走过的每一步，都在缩短与�
 var next=0,leaf=null,timer=null,button=document.getElementById('avatarBox'),box=document.getElementById('leaf-quote');
 button.addEventListener('click',function(){box.textContent=quotes[next];next=(next+1)%quotes.length;if(leaf)leaf.remove();clearTimeout(timer);if(matchMedia('(prefers-reduced-motion: reduce)').matches||document.body.classList.contains('reading-mode'))return;var r=button.getBoundingClientRect();leaf=document.createElement('i');leaf.className='quote-gold-leaf';leaf.setAttribute('aria-hidden','true');leaf.style.left=(r.left+r.width/2)+'px';leaf.style.top=(r.top+r.height/2)+'px';document.body.appendChild(leaf);timer=setTimeout(function(){if(leaf)leaf.remove();leaf=null;},2000);});
 })();</script>
-</body>
+<script>
+(function vehicleLearning(){
+var buttons=document.querySelectorAll('[data-vehicle]');
+function select(id){buttons.forEach(function(button){var active=button.getAttribute('data-vehicle')===id;button.setAttribute('aria-expanded',String(active));document.getElementById(button.getAttribute('aria-controls')).hidden=!active;});}
+buttons.forEach(function(button){button.addEventListener('click',function(){select(button.getAttribute('data-vehicle'));});});select('sensor');
+})();
+</script></body>
 </html>
